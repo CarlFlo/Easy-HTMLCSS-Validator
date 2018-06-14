@@ -11,10 +11,9 @@ import (
 var Config *configStruct
 
 type configStruct struct {
-	Cores         int    `json:"cores"` // Hur många cores som go rutines får använda
-	FolderName    string `json:"folderName"`
-	ReqHTMLFolder bool   `json:"reqHTMLFolder"`
-	MakeHelpTxt   bool   `json:"makeHelpTxt"`
+	Cores       int    `json:"cores"` // Hur många cores som go rutines får använda
+	FolderName  string `json:"folderName"`
+	MakeHelpTxt bool   `json:"makeHelpTxt"`
 }
 
 // ReadConfig försöker läsa configen
@@ -63,7 +62,6 @@ func createConfig() error {
 	jsonData := []byte(`{
 		"cores": 1,
 		"folderName": "putProjectFoldersInHere",
-		"reqHTMLFolder": true,
 		"makeHelpTxt": true}`)
 
 	configStruct := configStruct{}

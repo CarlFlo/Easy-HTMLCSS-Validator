@@ -1,6 +1,5 @@
 {
-   "cores": 2,
+   "cores": 1,
    "folderName": "putProjectFoldersInHere",
-   "reqHTMLFolder": true,
    "makeHelpTxt": true
 }
