@@ -1,5 +1,6 @@
 {
    "cores": 1,
    "folderName": "putProjectFoldersInHere",
+   "dispConfigOnStart": true,
    "makeHelpTxt": true
 }

@@ -11,9 +11,10 @@ import (
 var Config *configStruct
 
 type configStruct struct {
-	Cores       int    `json:"cores"` // Hur många cores som go rutines får använda
-	FolderName  string `json:"folderName"`
-	MakeHelpTxt bool   `json:"makeHelpTxt"`
+	Cores             int    `json:"cores"` // Hur många cores som go rutines får använda
+	FolderName        string `json:"folderName"`
+	DispConfigOnStart bool   `json:"dispConfigOnStart"`
+	MakeHelpTxt       bool   `json:"makeHelpTxt"`
 }
 
 // ReadConfig försöker läsa configen
@@ -43,15 +44,18 @@ func loadConfig() error {
 		return err
 	}
 
-	log.Println("Success!")
-	fmt.Println(string(file))
-
 	err = json.Unmarshal(file, &Config)
 
 	if err != nil {
 		log.Println(err.Error())
 		return err
 	}
+
+	log.Println("Success!")
+	if Config.DispConfigOnStart {
+		fmt.Println(string(file))
+	}
+
 	return nil
 }
 
@@ -62,6 +66,7 @@ func createConfig() error {
 	jsonData := []byte(`{
 		"cores": 1,
 		"folderName": "putProjectFoldersInHere",
+		"dispConfigOnStart": true,
 		"makeHelpTxt": true}`)
 
 	configStruct := configStruct{}

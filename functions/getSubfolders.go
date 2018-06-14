@@ -15,7 +15,14 @@ func WalkHTML(folderName string) []string {
 
 	skip := true
 
-	err := filepath.Walk(fmt.Sprintf("./%s/%s", Config.FolderName, folderName), func(path string, info os.FileInfo, err error) error {
+	startPath := fmt.Sprintf("./%s/%s", Config.FolderName, folderName)
+
+	// For when the user drags a folder onto the exe file for single verify
+	if DragAndDropMode {
+		startPath = fmt.Sprintf("./%s", folderName)
+	}
+
+	err := filepath.Walk(startPath, func(path string, info os.FileInfo, err error) error {
 
 		if skip {
 			skip = false
