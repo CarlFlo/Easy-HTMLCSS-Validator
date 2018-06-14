@@ -35,7 +35,7 @@ func ValidateHTML(html, path string, tmp int) error {
 
 	//functions.ParseHTML(resp.Body) // body istället
 
-	ioutil.WriteFile(string(fmt.Sprintf("./verified/%v.html", tmp)), body, 0644) // debug
+	ioutil.WriteFile(string(fmt.Sprintf("./%v.html", tmp)), body, 0644) // debug
 
 	return nil
 }
