@@ -51,6 +51,7 @@ func getGroupMsg(html string) {
 
 }
 
+// Gets section in HMTL return that contains the errors
 func filterHTML(html string) (string, string) {
 
 	atRightPoint := false
@@ -71,13 +72,12 @@ func filterHTML(html string) (string, string) {
 				cpy := totErrorsAndWarnings
 				for i := 0; i < len(cpy); i++ {
 					if strings.Compare(string(cpy[i]), " ") == 0 {
-						totErrorsAndWarnings = totErrorsAndWarnings[1:]
+						totErrorsAndWarnings = totErrorsAndWarnings[1:] // Tar bort bokstaven innan på index 0 (substring)
 					} else {
 						break
 					}
 				}
 			}
-
 			continue
 		}
 
@@ -91,7 +91,6 @@ func filterHTML(html string) (string, string) {
 		if divs == 0 {
 			return html, totErrorsAndWarnings
 		}
-
 	}
 
 	return "", totErrorsAndWarnings

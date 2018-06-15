@@ -13,6 +13,7 @@ import (
 
 func init() {
 
+	//functions.SleepMs(4000)
 	//functions.SetCmdSize("150", "25")
 	functions.Clear()
 	functions.ReadConfig()
@@ -39,8 +40,8 @@ func main() {
 	iterate(projectDirs)
 	fmt.Println(fmt.Sprintf("Duration: %v", time.Now().Sub(startTime)))
 
-	fmt.Println("Done")
-	time.Sleep(time.Second * 20)
+	fmt.Println("Done, will close in 30 sec")
+	time.Sleep(time.Second * 30)
 }
 
 func iterate(projectDirs []string) {

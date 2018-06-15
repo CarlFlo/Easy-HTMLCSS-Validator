@@ -7,6 +7,7 @@ import (
 	"os"
 	"os/exec"
 	"runtime"
+	"time"
 )
 
 // Clear will clear the screen
@@ -25,6 +26,11 @@ func Clear() {
 	default:
 		log.Println(fmt.Sprintf("Currently running on %s. No clear setting for this type", currentOS))
 	}
+}
+
+// SleepMs will sleep for n milliseconds
+func SleepMs(n time.Duration) {
+	time.Sleep(time.Millisecond * n)
 }
 
 // SetCmdSize sets the cmd size //
