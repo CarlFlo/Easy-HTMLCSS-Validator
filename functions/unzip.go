@@ -2,9 +2,12 @@ package functions
 
 import (
 	"archive/zip"
+	"fmt"
 	"io"
 	"os"
 	"path/filepath"
+	"strings"
+	"time"
 )
 
 // användning
@@ -69,4 +72,20 @@ func Unzip(src, dest string) error {
 	}
 
 	return nil
+}
+
+// IsZip returns true if string ends with .zip
+func IsZip(str string) bool {
+
+	if strings.EqualFold(str[len(str)-4:], ".zip") { // Its a zip file
+		return true
+	} else if strings.EqualFold(str[len(str)-4:], ".rar") { // Its a rar file
+		fmt.Println("ERROR: .rar is not supported yet. Use zip or a plain folder instead")
+		time.Sleep(time.Second * 10)
+		os.Exit(1)
+	}
+
+	fmt.Println("String extenstion is:", str)
+
+	return false
 }

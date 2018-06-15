@@ -17,8 +17,8 @@ func WalkHTML(folderName string) []string {
 
 	startPath := fmt.Sprintf("./%s/%s", Config.FolderName, folderName)
 
-	// For when the user drags a folder onto the exe file for single verify
-	if DragAndDropMode {
+	// For when the user drags a folder or zip onto the exe file for single verify
+	if SingleProjectMode {
 		startPath = fmt.Sprintf("./%s", folderName)
 	}
 

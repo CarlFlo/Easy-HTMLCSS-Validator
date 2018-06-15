@@ -26,7 +26,7 @@ func DoProject(folderName string, wg *sync.WaitGroup, mutex *sync.Mutex) {
 			return
 		}
 
-		err = ValidateHTML(string(txt), htmlPaths[i], i)
+		err = ValidateHTML(string(txt), htmlPaths[i])
 		if err != nil {
 			log.Printf("Could not validate %s: %v", folderName, err.Error())
 		}

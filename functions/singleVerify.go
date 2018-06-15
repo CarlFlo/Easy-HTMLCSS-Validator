@@ -7,8 +7,8 @@ import (
 	"time"
 )
 
-// DragAndDropMode special setting for get sub folder
-var DragAndDropMode = false
+// SingleProjectMode special setting for get sub folder
+var SingleProjectMode = false
 
 // HandleSingle handles a single project
 func HandleSingle() {
@@ -21,10 +21,22 @@ func HandleSingle() {
 
 	relativePath := argsWithoutProg[0][len(pwd)+1:]
 
+	// Checks if its a zip file and opens it
+	if IsZip(relativePath) {
+		newPath := fmt.Sprintf("./%s", relativePath[:len(relativePath)-4])
+		Unzip(fmt.Sprintf("./%s", relativePath), newPath)
+		relativePath = newPath
+		defer deleteUnzippedFolder(relativePath)
+	}
+
 	fmt.Println("\nRunning in single project mode!")
-	DragAndDropMode = true
+	SingleProjectMode = true
 
 	DoProject(relativePath, &wg, mutex)
+}
 
+func deleteUnzippedFolder(path string) {
+	fmt.Println("Delete:", path)
+	os.RemoveAll(path)
 	time.Sleep(time.Second * 120)
 }

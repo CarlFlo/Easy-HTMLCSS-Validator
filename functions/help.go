@@ -16,7 +16,7 @@ var helpTxt = `CONFIG
 // MakeHelpFile creates a helper file
 func MakeHelpFile() {
 
-	if _, err := os.Stat("/help.txt"); os.IsNotExist(err) {
+	if _, err := os.Stat("./help.txt"); os.IsNotExist(err) {
 
 		err = ioutil.WriteFile("help.txt", []byte(helpTxt), 0644)
 		if err != nil {

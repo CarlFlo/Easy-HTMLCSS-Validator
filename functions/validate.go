@@ -1,7 +1,6 @@
 package functions
 
 import (
-	"fmt"
 	"io/ioutil"
 	"log"
 	"net/http"
@@ -9,7 +8,7 @@ import (
 )
 
 // ValidateHTML will validate html with the server
-func ValidateHTML(html, path string, tmp int) error {
+func ValidateHTML(html, path string) error {
 
 	resp, err := http.PostForm("https://validator.w3.org/check",
 		url.Values{ // name
@@ -33,9 +32,17 @@ func ValidateHTML(html, path string, tmp int) error {
 		return err
 	}
 
-	//functions.ParseHTML(resp.Body) // body istället
+	// Parses the html code
 
-	ioutil.WriteFile(string(fmt.Sprintf("./%v.html", tmp)), body, 0644) // debug
+	ParseHTMLRaw(string(body))
+	//ParseHTML(bytes.NewReader(body))
+
+	// Debug for now. Will save return html to a file
+
+	/*
+		name := strings.Split(path, "\\")
+		ioutil.WriteFile(string(fmt.Sprintf("./Done-%s-%v", RandomString(4), name[len(name)-1])), body, 0644) // debug
+	*/
 
 	return nil
 }

@@ -13,6 +13,7 @@ import (
 
 func init() {
 
+	//functions.SetCmdSize("150", "25")
 	functions.Clear()
 	functions.ReadConfig()
 	if functions.Config.MakeHelpTxt {

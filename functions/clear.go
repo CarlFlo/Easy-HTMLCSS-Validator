@@ -3,6 +3,7 @@ package functions
 import (
 	"fmt"
 	"log"
+	"math/rand"
 	"os"
 	"os/exec"
 	"runtime"
@@ -24,4 +25,24 @@ func Clear() {
 	default:
 		log.Println(fmt.Sprintf("Currently running on %s. No clear setting for this type", currentOS))
 	}
+}
+
+// SetCmdSize sets the cmd size //
+func SetCmdSize(cols, lines string) {
+
+	cmd := exec.Command("mode", "con:", fmt.Sprintf("cols=%s", cols), fmt.Sprintf("lines=%s", lines))
+	cmd.Stdout = os.Stdout
+	cmd.Run()
+}
+
+// RandomString returns a random string of n length
+func RandomString(n int) string {
+
+	const letters = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ"
+
+	b := make([]byte, n)
+	for i := range b {
+		b[i] = letters[rand.Intn(len(letters))]
+	}
+	return string(b)
 }
