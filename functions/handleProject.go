@@ -7,10 +7,11 @@ import (
 )
 
 // DoProject går igenom ett project
-func DoProject(list *Work, index int, wg *sync.WaitGroup) {
+func DoProject(list *Work, index int, wg *sync.WaitGroup, wgUI *sync.WaitGroup) {
 	defer wg.Done() // defer is done at the end before return
 
 	WalkHTML(&list.Projects[index])
+	wgUI.Done()
 
 	if len(list.Projects[index].HTMLs) == 0 {
 		log.Printf("%s has no html files!", list.Projects[index].FolderName)

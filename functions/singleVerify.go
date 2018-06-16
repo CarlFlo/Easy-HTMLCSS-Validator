@@ -26,14 +26,6 @@ func HandleSingle(list *Work) {
 
 	relativePath := argsWithoutProg[0][len(pwd)+1:]
 
-	// Something wrong with relativePath
-
-	list.Projects = append(list.Projects, Project{
-		Done:       false,
-		FolderName: relativePath,
-		HTMLs:      []HTMLVerify{},
-	})
-
 	// Checks if its a zip file and opens it
 	if IsZip(relativePath) {
 		newPath := fmt.Sprintf("./%s", relativePath[:len(relativePath)-4])
@@ -44,10 +36,16 @@ func HandleSingle(list *Work) {
 		}
 	}
 
+	list.Projects = append(list.Projects, Project{
+		Done:       false,
+		FolderName: relativePath,
+		HTMLs:      []HTMLVerify{},
+	})
+
 	fmt.Println("\nRunning in single project mode!")
 	SingleProjectMode = true
-
-	DoProject(list, 0, &sync.WaitGroup{})
+	go UpdateScreen(list)                                    // the ui
+	DoProject(list, 0, &sync.WaitGroup{}, &sync.WaitGroup{}) // These WaitGroup are not needed/used when doing 1 project but func needs them
 }
 
 func deleteUnzippedFolder(path string) {

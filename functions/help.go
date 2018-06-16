@@ -31,7 +31,7 @@ func createString() []byte {
 	buffer.WriteString("\nmakeHelpTxt: If this txt file is to be created (def=true)")
 	buffer.WriteString("\ndeleteUnzipedFolder: If true then .zip folders extracted data is deleted after use")
 	buffer.WriteString("\nDrawUI: True if you want to show the progress in the cmd")
-	buffer.WriteString("\nUpdateUiMs: How long the UI will wait in milliseconds before updating progress on screen")
+	buffer.WriteString("\nUpdateUiMs: How long the UI will wait in milliseconds before updating the progress on screen")
 	buffer.WriteString("\n\nYou can both drag and drop a zip file or folder with html files inside them onto the exe file to validate just those files")
 
 	return buffer.Bytes()

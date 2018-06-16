@@ -47,6 +47,10 @@ func PopulateProjectArr(list *Work) {
 	i := 0
 	for _, f := range files {
 
+		if !f.IsDir() { // skips everything that isnt a folder
+			continue
+		}
+
 		// Created a new project object for each folder
 		list.Projects = append(list.Projects, Project{
 			Done:       false,

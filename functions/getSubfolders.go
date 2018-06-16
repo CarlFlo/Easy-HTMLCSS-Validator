@@ -12,6 +12,7 @@ import (
 func WalkHTML(project *Project) {
 	skip := true
 
+	// startPath is where the Walk will begin to find all html files
 	startPath := fmt.Sprintf("./%s/%s", Config.FolderName, project.FolderName)
 
 	// For when the user drags a folder or zip onto the exe file for single verify
