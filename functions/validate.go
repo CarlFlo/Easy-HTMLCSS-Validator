@@ -8,7 +8,7 @@ import (
 )
 
 // ValidateHTML will validate html with the server
-func ValidateHTML(html, path string) error {
+func ValidateHTML(html string, singleHTML *HTMLVerify) error {
 
 	resp, err := http.PostForm("https://validator.w3.org/check",
 		url.Values{ // name
@@ -33,16 +33,11 @@ func ValidateHTML(html, path string) error {
 	}
 
 	// Parses the html code
+	ParseHTML(string(body), singleHTML)
 
-	ParseHTMLRaw(string(body))
-	//ParseHTML(bytes.NewReader(body))
-
-	// Debug for now. Will save return html to a file
-
-	/*
-		name := strings.Split(path, "\\")
-		ioutil.WriteFile(string(fmt.Sprintf("./Done-%s-%v", RandomString(4), name[len(name)-1])), body, 0644) // debug
+	/* // Debug for now. This will save return html to a file
+	name := strings.Split(path, "\\")
+	ioutil.WriteFile(string(fmt.Sprintf("./Done-%s-%v", RandomString(4), name[len(name)-1])), body, 0644) // debug
 	*/
-
 	return nil
 }

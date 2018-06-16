@@ -34,10 +34,8 @@ func CheckPath() {
 	}
 }
 
-// GetProjectDirs Hämtar alla mappnamn i path
-func GetProjectDirs() []string {
-
-	var dirs []string
+// PopulateProjectArr Hämtar alla mappnamn i path
+func PopulateProjectArr(list *Work) {
 
 	files, err := ioutil.ReadDir(fmt.Sprintf("./%s/", Config.FolderName))
 	if err != nil {
@@ -46,11 +44,16 @@ func GetProjectDirs() []string {
 
 	fmt.Println(fmt.Sprintf("Totalt %d st mappar i %s:\n", len(files), Config.FolderName))
 
+	i := 0
 	for _, f := range files {
-		dirs = append(dirs, f.Name())
-		fmt.Println(f.Name())
-	}
 
-	fmt.Println("------END------\n")
-	return dirs
+		// Created a new project object for each folder
+		list.Projects = append(list.Projects, Project{
+			Done:       false,
+			FolderName: f.Name(),
+			HTMLs:      []HTMLVerify{},
+		})
+
+		i++
+	}
 }

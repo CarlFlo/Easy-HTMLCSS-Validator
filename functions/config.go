@@ -5,16 +5,20 @@ import (
 	"fmt"
 	"io/ioutil"
 	"log"
+	"time"
 )
 
 // Config håller i alla variabler som blir inlästa
 var Config *configStruct
 
 type configStruct struct {
-	Cores             int    `json:"cores"` // Hur många cores som go rutines får använda
-	FolderName        string `json:"folderName"`
-	DispConfigOnStart bool   `json:"dispConfigOnStart"`
-	MakeHelpTxt       bool   `json:"makeHelpTxt"`
+	Cores               int           `json:"cores"` // Hur många cores som go rutines får använda
+	FolderName          string        `json:"folderName"`
+	DispConfigOnStart   bool          `json:"dispConfigOnStart"`
+	MakeHelpTxt         bool          `json:"makeHelpTxt"`
+	DeleteUnzipedFolder bool          `json:"deleteUnzipedFolder"`
+	DrawUI              bool          `json:"drawUI"`
+	UpdateUiMs          time.Duration `json:"updateUiMs"`
 }
 
 // ReadConfig försöker läsa configen
@@ -64,10 +68,13 @@ func createConfig() error {
 	log.Println("Creating config...")
 
 	jsonData := []byte(`{
-		"cores": 1,
+		"cores": 2,
 		"folderName": "putProjectFoldersInHere",
 		"dispConfigOnStart": true,
-		"makeHelpTxt": true}`)
+		"makeHelpTxt": true,
+		"deleteUnzipedFolder": true,
+		"DrawUI": true,
+		"UpdateUiMs": 50}`)
 
 	configStruct := configStruct{}
 

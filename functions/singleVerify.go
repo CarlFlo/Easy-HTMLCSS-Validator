@@ -3,6 +3,7 @@ package functions
 import (
 	"fmt"
 	"os"
+	"strings"
 	"sync"
 	"time"
 )
@@ -11,28 +12,42 @@ import (
 var SingleProjectMode = false
 
 // HandleSingle handles a single project
-func HandleSingle() {
-
-	var mutex = &sync.Mutex{}
-	var wg = sync.WaitGroup{}
+func HandleSingle(list *Work) {
 
 	argsWithoutProg := os.Args[1:]
 	pwd, _ := os.Getwd()
 
+	// Check if its the same dir, will not work if different drive. Maybe not needed
+	if !strings.Contains(argsWithoutProg[0], pwd) {
+		fmt.Println("Bad path! Place zip or folder in the same location as the exe file")
+		SleepMs(5000)
+		return
+	}
+
 	relativePath := argsWithoutProg[0][len(pwd)+1:]
+
+	// Something wrong with relativePath
+
+	list.Projects = append(list.Projects, Project{
+		Done:       false,
+		FolderName: relativePath,
+		HTMLs:      []HTMLVerify{},
+	})
 
 	// Checks if its a zip file and opens it
 	if IsZip(relativePath) {
 		newPath := fmt.Sprintf("./%s", relativePath[:len(relativePath)-4])
 		Unzip(fmt.Sprintf("./%s", relativePath), newPath)
 		relativePath = newPath
-		defer deleteUnzippedFolder(relativePath)
+		if Config.DeleteUnzipedFolder {
+			defer deleteUnzippedFolder(relativePath)
+		}
 	}
 
 	fmt.Println("\nRunning in single project mode!")
 	SingleProjectMode = true
 
-	DoProject(relativePath, &wg, mutex)
+	DoProject(list, 0, &sync.WaitGroup{})
 }
 
 func deleteUnzippedFolder(path string) {

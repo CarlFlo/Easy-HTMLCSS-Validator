@@ -12,8 +12,8 @@ import (
 
 // användning
 // functions.Unzip("./Ny mapp/Choco-Latte.zip", "./Ny mapp/")
-
 // https://stackoverflow.com/questions/20357223/easy-way-to-unzip-file-with-golang
+
 // Unzip unzips a file
 func Unzip(src, dest string) error {
 	r, err := zip.OpenReader(src)

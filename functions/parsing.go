@@ -2,49 +2,77 @@ package functions
 
 import (
 	"bufio"
+	"bytes"
 	"fmt"
-	"io"
 	"log"
+	"strconv"
 	"strings"
-
-	"golang.org/x/net/html"
 )
 
-// ParseHTML parses the html
-func ParseHTML(body io.Reader) {
+// ParseHTML will parse raw html
+func ParseHTML(html string, singleHTML *HTMLVerify) {
 
-	doc, err := html.Parse(body)
-	if err != nil {
-		// ...
-	}
-	var f func(*html.Node)
-	f = func(n *html.Node) {
-		if n.Type == html.ElementNode && n.Data == "li" && len(n.Attr) > 0 && n.Attr[0].Val == "grouped msg_err" {
-
-			fmt.Println(n.FirstChild)
-
-		}
-		for c := n.FirstChild; c != nil; c = c.NextSibling {
-			f(c)
-		}
-	}
-	f(doc)
-
-}
-
-// ParseHTMLRaw will parse raw html
-func ParseHTMLRaw(html string) {
-
-	html, totErrors := filterHTML(html)
-
-	log.Println(">", totErrors, "<")
+	html, totErrorsAndWarnings := filterHTML(html)
 
 	if len(html) == 0 {
-		log.Println("ERROR! html length after parsing is 0")
+		log.Println("ERROR! html length after parsing is 0, path:", singleHTML.Path)
 		return
 	}
+
+	// Get total warnings and errors as said from the HTML Doc
+	singleHTML.TotalErrors, singleHTML.TotalWarnings = parseErrAndWarn(totErrorsAndWarnings)
+
+	//log.Println("Err:", singleHTML.TotalErrors, " Warn:", singleHTML.TotalWarnings)
+
 	getGroupMsg(html)
 
+	// Mark as done
+	singleHTML.Verified = true
+}
+
+// Seperated the errors from the warnings and returns them as int
+func parseErrAndWarn(str string) (int, int) {
+	errVal := 0
+	var errBuff bytes.Buffer
+	errDone := false
+	warnVal := 0
+	warnTurn := false
+	var warnBuff bytes.Buffer
+
+	// str format -> xx Errors, yy warning(s)
+
+	for i := 0; i < len(str); i++ {
+		if str[i] != ' ' { // Not a space
+			if !errDone {
+				errBuff.WriteByte(str[i])
+				continue
+			} else if !warnTurn && str[i] == ',' { // Warnings
+				warnTurn = true
+				continue
+			} else if warnTurn {
+				warnBuff.WriteByte(str[i])
+			}
+		} else { // a space
+			if !errDone {
+				tmpErrVal, err := strconv.Atoi(errBuff.String())
+				if err != nil {
+					errVal = -1
+				} else {
+					errVal = tmpErrVal
+				}
+				errDone = true
+			} else if warnTurn && len(warnBuff.String()) != 0 {
+				tmpWarnVal, err := strconv.Atoi(warnBuff.String())
+				if err != nil {
+					warnVal = -1
+				} else {
+					warnVal = tmpWarnVal
+				}
+				return errVal, warnVal
+			}
+		}
+	}
+	return errVal, warnVal
 }
 
 func getGroupMsg(html string) {

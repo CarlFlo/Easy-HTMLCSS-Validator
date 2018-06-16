@@ -7,29 +7,32 @@ import (
 )
 
 // DoProject går igenom ett project
-func DoProject(folderName string, wg *sync.WaitGroup, mutex *sync.Mutex) {
+func DoProject(list *Work, index int, wg *sync.WaitGroup) {
+	defer wg.Done() // defer is done at the end before return
 
-	defer wg.Done() // defer is done at the end
+	WalkHTML(&list.Projects[index])
 
-	htmlPaths := WalkHTML(folderName)
-
-	if len(htmlPaths) == 0 {
-		log.Printf("%s has no html files!", folderName)
+	if len(list.Projects[index].HTMLs) == 0 {
+		log.Printf("%s has no html files!", list.Projects[index].FolderName)
 		return
 	}
 
-	for i := 0; i < len(htmlPaths); i++ {
+	// Will iterate thru all html pages that were found
+	for i := 0; i < len(list.Projects[index].HTMLs); i++ {
 
-		txt, err := ioutil.ReadFile(htmlPaths[i])
+		html, err := ioutil.ReadFile(list.Projects[index].HTMLs[i].Path)
 		if err != nil {
-			log.Printf("%s - %v", folderName, err.Error())
+			log.Printf("%s - %v", list.Projects[index].FolderName, err.Error())
 			return
 		}
 
-		err = ValidateHTML(string(txt), htmlPaths[i])
+		err = ValidateHTML(string(html), &list.Projects[index].HTMLs[i])
 		if err != nil {
-			log.Printf("Could not validate %s: %v", folderName, err.Error())
+			log.Printf("Could not validate %s: %v", list.Projects[index].FolderName, err.Error())
 		}
-		log.Println("Validated:", htmlPaths[i])
+
+		//log.Println("Validated:", list.Projects[index].HTMLs[i].Path)
 	}
+	// Mark as done
+	list.Projects[index].Done = true
 }
