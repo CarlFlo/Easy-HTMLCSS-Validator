@@ -4,7 +4,6 @@ import (
 	"bufio"
 	"bytes"
 	"fmt"
-	"log"
 	"strconv"
 	"strings"
 )
@@ -12,19 +11,18 @@ import (
 // ParseHTML will parse raw html
 func ParseHTML(html string, singleHTML *HTMLVerify) {
 
-	html, totErrorsAndWarnings := filterHTML(html)
+	totErrorsAndWarnings := filterHTML(html, singleHTML)
 
-	if len(html) == 0 {
-		log.Println("ERROR! html length after parsing is 0, path:", singleHTML.Path)
-		return
-	}
+	/*
+		if len(html) == 0 {
+			log.Println("ERROR! html length after parsing is 0, path:", singleHTML.Path)
+			return
+		} */
 
 	// Get total warnings and errors as said from the HTML Doc
 	singleHTML.TotalErrors, singleHTML.TotalWarnings = parseErrAndWarn(totErrorsAndWarnings)
 
 	//log.Println("Err:", singleHTML.TotalErrors, " Warn:", singleHTML.TotalWarnings)
-
-	getGroupMsg(html)
 
 	// Mark as done
 	singleHTML.Verified = true
@@ -75,53 +73,111 @@ func parseErrAndWarn(str string) (int, int) {
 	return errVal, warnVal
 }
 
-func getGroupMsg(html string) {
-
-}
-
 // Gets section in HMTL return that contains the errors
-func filterHTML(html string) (string, string) {
+func filterHTML(html string, singleHTML *HTMLVerify) string {
 
-	atRightPoint := false
+	atErrors := false
+	atWarnings := false
 	divs := 0
 	totErrorsAndWarnings := ""
 
 	scanner := bufio.NewScanner(strings.NewReader(html)) // reads html
 	html = ""                                            // resets html to "" bc we dont need it anymore
+	// Used to keep track on what index the warn and err is supposed to be writed to in the singleHTML object
 	for scanner.Scan() {
 		if strings.Contains(scanner.Text(), "<div id=\"result\">") {
-			atRightPoint = true
+			// At section where errors are
+			atErrors = true
+			continue
+		} else if strings.Contains(scanner.Text(), "<h3 id=\"preparse_warnings\">Notes and Potential Issues</h3>") {
+			// At section where warnings are
+			atWarnings = true
+			continue
 		}
-		if !atRightPoint {
 
-			// Gets total errors and warnings
-			if strings.Contains(scanner.Text(), "warning(s)") {
-				totErrorsAndWarnings = scanner.Text()
-				cpy := totErrorsAndWarnings
-				for i := 0; i < len(cpy); i++ {
-					if strings.Compare(string(cpy[i]), " ") == 0 {
-						totErrorsAndWarnings = totErrorsAndWarnings[1:] // Tar bort bokstaven innan på index 0 (substring)
-					} else {
-						break
-					}
+		if atWarnings {
+			// Parse warning data here
+
+			// Take entire row and filter out tags and unwanted text
+			if strings.Contains(scanner.Text(), "<span class=\"msg\">") {
+
+				// Cleanup scanner.Text() before append
+
+				singleHTML.Warnings = append(singleHTML.Warnings, scanner.Text())
+
+				// Check before loop
+				if strings.Contains(scanner.Text(), "</span>") {
+					continue
 				}
+				panic("Warning did not have </span> at the end") // debug
+				/*
+					// Loop till closing span
+					for scanner.Scan() {
+						//singleHTML.Warnings[currentWarningIndex] += scanner.Text()
+						if strings.Contains(scanner.Text(), "</span>") { // end
+							break
+						}
+					}
+					continue
+				*/
+			}
+
+			// Detects end of warnings
+			if strings.Contains(scanner.Text(), "<!-- End of \"warnings\". -->") {
+				atWarnings = false
+				continue
 			}
 			continue
 		}
 
-		if strings.Contains(scanner.Text(), "<div ") {
-			divs++
-		} else if strings.Contains(scanner.Text(), "</div>") {
-			divs--
+		if atErrors {
+			// Parse error data here
+
+			if strings.Contains(scanner.Text(), "<li class=\"grouped msg_err\">") {
+
+				for scanner.Scan() {
+					if strings.Contains(scanner.Text(), "<span class=\"msg\">") {
+						// Error section. save this scanner.Text()
+						// Replace Errors with new struct type
+					}
+				}
+
+				// Iterate to end off li. Each error is in its own li inside a ul
+			}
+
+			// Checks for when error section is over
+			if strings.Contains(scanner.Text(), "<div ") {
+				divs++
+			} else if strings.Contains(scanner.Text(), "</div>") {
+				divs--
+			}
+			html += fmt.Sprintf("%s\n", scanner.Text())
+			if divs == 0 {
+				return totErrorsAndWarnings
+			}
+			continue
 		}
 
-		html += fmt.Sprintf("%s\n", scanner.Text())
-		if divs == 0 {
-			return html, totErrorsAndWarnings
+		// This is done outside of warnings and errors //
+
+		// Check for <br> elements
+
+		// Gets total errors and warnings
+		if strings.Contains(scanner.Text(), "warning(s)") {
+			totErrorsAndWarnings = scanner.Text()
+			cpy := totErrorsAndWarnings
+			for i := 0; i < len(cpy); i++ {
+				if strings.Compare(string(cpy[i]), " ") == 0 {
+					totErrorsAndWarnings = totErrorsAndWarnings[1:] // Tar bort bokstaven innan på index 0 (substring)
+				} else {
+					break
+				}
+			}
 		}
+		continue
 	}
 
-	return "", totErrorsAndWarnings
+	return totErrorsAndWarnings
 
 	/*
 		li

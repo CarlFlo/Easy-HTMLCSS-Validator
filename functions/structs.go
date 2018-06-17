@@ -1,12 +1,16 @@
 package functions
 
-import "sync"
+import (
+	"sync"
+	"time"
+)
 
 // Work holds the data of everything
 type Work struct {
 	Mutex    sync.Mutex // For potential races when writing to Projects
 	Projects []Project
 	Complete bool
+	Timing   Timing
 }
 
 // Project Holds one projects and its html file paths
@@ -24,4 +28,16 @@ type HTMLVerify struct {
 	TotalWarnings int
 	Errors        []string // All errors
 	TotalErrors   int
+}
+
+// ErrorGroup holds an error group. Its type as string and the errors as []string
+type ErrorGroup struct {
+	errorType    string
+	errorStrings []string
+}
+
+// Timing holds when the validation was started and when it was finished
+type Timing struct {
+	StartTime time.Time
+	EndTime   time.Time
 }

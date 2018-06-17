@@ -1,7 +1,6 @@
 package main
 
 import (
-	"fmt"
 	"os"
 	"runtime"
 	"sync"
@@ -19,6 +18,7 @@ func init() {
 	if functions.Config.MakeHelpTxt {
 		functions.MakeHelpFile()
 	}
+
 	runtime.GOMAXPROCS(functions.Config.Cores)
 }
 
@@ -28,13 +28,16 @@ func main() {
 		Mutex:    sync.Mutex{},
 		Projects: []functions.Project{},
 		Complete: false,
+		Timing: functions.Timing{
+			StartTime: time.Now(),
+		},
 	}
 
 	/* Fix singleVerify */
 
 	// For when user drags in a folder or .zip file onto the exe file for single verify
 	if len(os.Args) > 1 {
-
+		// Fix
 		functions.HandleSingle(list)
 		return
 	}
@@ -45,7 +48,6 @@ func main() {
 
 	var wg = sync.WaitGroup{}
 	var wgUI = sync.WaitGroup{}
-	startTime := time.Now()
 
 	for i := 0; i < len(list.Projects); i++ {
 		wg.Add(1)
@@ -56,13 +58,8 @@ func main() {
 	go functions.UpdateScreen(list) // the ui
 
 	wg.Wait()
-
+	list.Timing.EndTime = time.Now()
 	list.Complete = true
 
-	fmt.Println("(It's done even if it says that one isn't 100%)")
-	fmt.Println(fmt.Sprintf("Validation took: %v\n", time.Now().Sub(startTime)))
-
-	functions.ShowResult(list)
-
-	functions.SleepMs(9000000)
+	functions.SleepMs(9000000) // So the windows wont close. Change this later
 }

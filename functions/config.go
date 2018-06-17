@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"io/ioutil"
 	"log"
+	"runtime"
 	"time"
 )
 
@@ -18,7 +19,7 @@ type configStruct struct {
 	MakeHelpTxt         bool          `json:"makeHelpTxt"`
 	DeleteUnzipedFolder bool          `json:"deleteUnzipedFolder"`
 	DrawUI              bool          `json:"drawUI"`
-	UpdateUiMs          time.Duration `json:"updateUiMs"`
+	UpdateUIMs          time.Duration `json:"updateUIMs"`
 }
 
 // ReadConfig försöker läsa configen
@@ -37,7 +38,7 @@ func ReadConfig() {
 	}
 }
 
-// Försöker läsa in configen
+// Tries to read config file
 func loadConfig() error {
 	log.Println("Reading config...")
 
@@ -56,14 +57,15 @@ func loadConfig() error {
 	}
 
 	log.Println("Success!")
+	checkConfigValues()
 	if Config.DispConfigOnStart {
-		fmt.Println(string(file))
+		fmt.Println(string(file)) // This value will not update if checkConfigValues changed anything
 	}
 
 	return nil
 }
 
-// Fösköker skapa config filen
+// Tries to create config file
 func createConfig() error {
 	log.Println("Creating config...")
 
@@ -74,7 +76,7 @@ func createConfig() error {
 		"makeHelpTxt": true,
 		"deleteUnzipedFolder": true,
 		"DrawUI": true,
-		"UpdateUiMs": 50}`)
+		"UpdateUIMs": 50}`)
 
 	configStruct := configStruct{}
 
@@ -87,4 +89,22 @@ func createConfig() error {
 	jsonDataJSON, _ := json.MarshalIndent(configStruct, "", "   ")
 	err = ioutil.WriteFile("config.json", jsonDataJSON, 0644)
 	return nil
+}
+
+// Checks so values in config file are ok
+func checkConfigValues() {
+
+	// The amount of cores that goroutines can use should not be over the number of cores available
+	if Config.Cores > runtime.NumCPU() {
+		Config.Cores = runtime.NumCPU()
+		fmt.Println("\"cores\" in config was invalid and thus changed to:", Config.Cores)
+	}
+	// Minimum update rate is 50ms and max is 1000ms
+	if Config.UpdateUIMs < 50 {
+		Config.UpdateUIMs = 50
+		fmt.Println("\"updateUIMs\" in config was invalid and thus changed to:", Config.UpdateUIMs)
+	} else if Config.UpdateUIMs > 1000 {
+		Config.UpdateUIMs = 1000
+		fmt.Println("\"updateUIMs\" in config was invalid and thus changed to:", Config.UpdateUIMs)
+	}
 }
