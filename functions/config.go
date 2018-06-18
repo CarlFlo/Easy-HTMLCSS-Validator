@@ -13,13 +13,14 @@ import (
 var Config *configStruct
 
 type configStruct struct {
-	Cores               int           `json:"cores"` // Hur många cores som go rutines får använda
-	FolderName          string        `json:"folderName"`
-	DispConfigOnStart   bool          `json:"dispConfigOnStart"`
-	MakeHelpTxt         bool          `json:"makeHelpTxt"`
-	DeleteUnzipedFolder bool          `json:"deleteUnzipedFolder"`
-	DrawUI              bool          `json:"drawUI"`
-	UpdateUIMs          time.Duration `json:"updateUIMs"`
+	Cores                      int           `json:"cores"` // Hur många cores som go rutines får använda
+	FolderName                 string        `json:"folderName"`
+	DispConfigOnStart          bool          `json:"dispConfigOnStart"`
+	MakeHelpTxt                bool          `json:"makeHelpTxt"`
+	DeleteUnzipedFolder        bool          `json:"deleteUnzipedFolder"`
+	ValidateWithHTML5_verySlow bool          `json:validateWithHTML5_verySlow`
+	DrawUI                     bool          `json:"drawUI"`
+	UpdateUIMs                 time.Duration `json:"updateUIMs"`
 }
 
 // ReadConfig försöker läsa configen
@@ -71,10 +72,11 @@ func createConfig() error {
 
 	jsonData := []byte(`{
 		"cores": 2,
-		"folderName": "putProjectFoldersInHere",
+		"folderName": "Projects",
 		"dispConfigOnStart": true,
 		"makeHelpTxt": true,
 		"deleteUnzipedFolder": true,
+		"validateWithHTML5_verySlow": false,
 		"DrawUI": true,
 		"UpdateUIMs": 50}`)
 

@@ -34,7 +34,7 @@ func UpdateScreen(list *Work) {
 				total := len(list.Projects[i].HTMLs)
 				done = 0
 				for j := 0; j < total; j++ {
-					if list.Projects[i].HTMLs[j].Verified {
+					if list.Projects[i].HTMLs[j].AllVerified {
 						done++
 					}
 				}
@@ -61,18 +61,34 @@ func showResult(list *Work) {
 	/*	Lists Folder name and the html files in the project */
 	for _, project := range list.Projects {
 		fmt.Println("\nFolder name:", project.FolderName)
+
+		// Show css result
+		fmt.Println("CSS:\n")
+
 		for val, htmlFile := range project.HTMLs {
 			// Filepath
 			fmt.Println(fmt.Sprintf("[%d] File: %s", val+1, htmlFile.Path))
-			// Errors
-			fmt.Println("Errors:", htmlFile.TotalErrors)
-			for k, v := range htmlFile.Errors {
+
+			// HTML5
+			fmt.Println("\n[HTML5]:")
+			if htmlFile.HTML5Verify.ErrorValidating != nil {
+				fmt.Println("Error validating:", htmlFile.HTML5Verify.ErrorValidating.Error())
+			} else if htmlFile.HTML5Verify.HasWarningsOrErrors {
+				fmt.Println("NOT OK")
+			} else {
+				fmt.Println("OK")
+			}
+
+			// Strict Errors
+			fmt.Println("\n[XHTML 1.0 Strict]:")
+			fmt.Println("Errors:", htmlFile.StrictVerify.TotalErrors)
+			for k, v := range htmlFile.StrictVerify.Errors {
 				fmt.Println(fmt.Sprintf("%d: %s", k, v))
 			}
-			// Warnings
-			fmt.Println("\nWarnings:", htmlFile.TotalWarnings)
+			// Strict Warnings
+			fmt.Println("\nWarnings:", htmlFile.StrictVerify.TotalWarnings)
 
-			for k, v := range htmlFile.Warnings {
+			for k, v := range htmlFile.StrictVerify.Warnings {
 				fmt.Println(fmt.Sprintf("%d: %s", k, v))
 			}
 

@@ -18,16 +18,45 @@ type Project struct {
 	Done       bool         // If project is verified
 	FolderName string       // Name of folder
 	HTMLs      []HTMLVerify // Holds that projects html files
+	CSSs       []CSSVerify  // Holds css file(s) in project
 }
 
 // HTMLVerify holds one html doc and its warnings and errors
 type HTMLVerify struct {
-	Path          string   // Path to html doc
+	Path         string       // Path to html doc
+	AllVerified  bool         // If file has been verified for both strict and html5
+	StrictVerify StrictVerify // For XHTML 1.0 Strict
+	HTML5Verify  HTML5Verify  // For HTML5
+	/*
+		Warnings      []string     // All warnings
+		TotalWarnings int
+		Errors        []string // All errors
+		TotalErrors   int
+	*/
+}
+
+// StrictVerify holds data for the XHTML 1.0 Strict verify
+type StrictVerify struct {
 	Verified      bool     // If file has been verified
 	Warnings      []string // All warnings
 	TotalWarnings int
 	Errors        []string // All errors
 	TotalErrors   int
+}
+
+// HTML5Verify holds if file has warnings/errors for the HTML5. Should have none if ok
+type HTML5Verify struct {
+	Verified            bool // If file has been verified
+	HasWarningsOrErrors bool // File has warnings
+	ErrorValidating     error
+}
+
+// CSSVerify holds if css file(s) has warnings/errors for the CSS. Should have none if ok
+type CSSVerify struct {
+	Path        string // Path to css file
+	Verified    bool   // If file has been verified
+	HasWarnings bool   // File has warnings
+	HasErrors   bool   // File has errors
 }
 
 // ErrorGroup holds an error group. Its type as string and the errors as []string

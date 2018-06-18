@@ -11,6 +11,7 @@ import (
 // ParseHTML will parse raw html
 func ParseHTML(html string, singleHTML *HTMLVerify) {
 
+	// Parses for XHTML 1.0 Strict
 	totErrorsAndWarnings := filterHTML(html, singleHTML)
 
 	/*
@@ -20,12 +21,12 @@ func ParseHTML(html string, singleHTML *HTMLVerify) {
 		} */
 
 	// Get total warnings and errors as said from the HTML Doc
-	singleHTML.TotalErrors, singleHTML.TotalWarnings = parseErrAndWarn(totErrorsAndWarnings)
+	singleHTML.StrictVerify.TotalErrors, singleHTML.StrictVerify.TotalWarnings = parseErrAndWarn(totErrorsAndWarnings)
 
 	//log.Println("Err:", singleHTML.TotalErrors, " Warn:", singleHTML.TotalWarnings)
 
-	// Mark as done
-	singleHTML.Verified = true
+	// Mark this html file as done
+	singleHTML.AllVerified = true
 }
 
 // Seperated the errors from the warnings and returns them as int
@@ -96,14 +97,25 @@ func filterHTML(html string, singleHTML *HTMLVerify) string {
 		}
 
 		if atWarnings {
+			// Notes and Potential Issues - Section in html response
 			// Parse warning data here
 
 			// Take entire row and filter out tags and unwanted text
 			if strings.Contains(scanner.Text(), "<span class=\"msg\">") {
 
-				// Cleanup scanner.Text() before append
+				// Cleanup string. Removed /span and /p from string
+				trimmedStr := scanner.Text()[:len(scanner.Text())-11]
 
-				singleHTML.Warnings = append(singleHTML.Warnings, scanner.Text())
+				// Goes thru string backwards
+				// Looking for  "msg">  string
+				for i := len(scanner.Text()) - 3; i > 0; i-- {
+					if scanner.Text()[i] == '>' && scanner.Text()[i-1] == '"' && scanner.Text()[i-2] == 'g' && scanner.Text()[i-3] == 's' {
+						trimmedStr = trimmedStr[i+1:]
+						break
+					}
+				}
+
+				singleHTML.StrictVerify.Warnings = append(singleHTML.StrictVerify.Warnings, trimmedStr)
 
 				// Check before loop
 				if strings.Contains(scanner.Text(), "</span>") {
@@ -176,6 +188,9 @@ func filterHTML(html string, singleHTML *HTMLVerify) string {
 		}
 		continue
 	}
+
+	// XHTML 1.0 Strict verify is done
+	singleHTML.StrictVerify.Verified = true
 
 	return totErrorsAndWarnings
 

@@ -35,8 +35,14 @@ func WalkHTML(project *Project) {
 			if strings.EqualFold(info.Name()[len(info.Name())-4:], "html") {
 				// Lägg till hela sökvägen till html filen i HTMLs arrayen
 				project.HTMLs = append(project.HTMLs, HTMLVerify{
-					Path:     path,
-					Verified: false,
+					Path:        path,
+					AllVerified: false,
+					StrictVerify: StrictVerify{
+						Verified: false,
+					},
+					HTML5Verify: HTML5Verify{
+						Verified: false,
+					},
 				})
 			}
 
