@@ -6,9 +6,8 @@ Validates html in bulk
 ## REQUIREMENTS
 
 ### goquery
-Get it by going here: github.com/PuerkitoBio/goquery or type
+Get it by going here: github.com/PuerkitoBio/goquery or type the following in cmd:
 ##### go get -u github.com/PuerkitoBio/goquery
-in cmd
 
 ### Requires vnu.jar and JAVA in path for html5 verify (optinal)
 This jar in the same folder as exe file for html5 validation to work (warning html5 validation very slow and demanding and needs to be turned on in config)
