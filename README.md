@@ -6,7 +6,7 @@ Validates html in bulk
 ## REQUIREMENTS
 
 ### goquery
-Get it by going here: github.com/PuerkitoBio/goquery or type the following in cmd:
+Get it by going here: https://github.com/PuerkitoBio/goquery or type the following in cmd:
 ##### go get -u github.com/PuerkitoBio/goquery
 
 ### Requires vnu.jar and JAVA in path for html5 verify (optinal)
