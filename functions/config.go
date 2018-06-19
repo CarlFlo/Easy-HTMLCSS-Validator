@@ -15,7 +15,7 @@ var Config *configStruct
 type configStruct struct {
 	Cores                      int           `json:"cores"` // Hur många cores som go rutines får använda
 	FolderName                 string        `json:"folderName"`
-	OutputFileName             string        `json:"outputFileName"`
+	OutputFilename             string        `json:"outputFilename"`
 	DispConfigOnStart          bool          `json:"dispConfigOnStart"`
 	MakeHelpTxt                bool          `json:"makeHelpTxt"`
 	DeleteUnzipedFolder        bool          `json:"deleteUnzipedFolder"`
@@ -62,6 +62,7 @@ func loadConfig() error {
 	checkConfigValues()
 	if Config.DispConfigOnStart {
 		fmt.Println(string(file)) // This value will not update if checkConfigValues changed anything
+		SleepMs(3500)
 	}
 
 	return nil
@@ -71,27 +72,24 @@ func loadConfig() error {
 func createConfig() error {
 	log.Println("Creating config...")
 
-	jsonData := []byte(`{
-		"cores": 2,
-		"folderName": "Projects",
-		"outputFileName": "output.json",
-		"dispConfigOnStart": true,
-		"makeHelpTxt": true,
-		"deleteUnzipedFolder": true,
-		"validateWithHTML5_verySlow": false,
-		"DrawUI": true,
-		"UpdateUIMs": 50}`)
-
-	configStruct := configStruct{}
-
-	err := json.Unmarshal(jsonData, &configStruct)
-	if err != nil {
-		log.Println("Error! Could not create file...")
-		return err
+	// Default settings
+	configStruct := configStruct{
+		Cores:                      2,
+		FolderName:                 "Projects",
+		OutputFilename:             "output.json",
+		DispConfigOnStart:          true,
+		MakeHelpTxt:                true,
+		DeleteUnzipedFolder:        true,
+		ValidateWithHTML5_verySlow: false,
+		DrawUI:     true,
+		UpdateUIMs: 50,
 	}
 
 	jsonDataJSON, _ := json.MarshalIndent(configStruct, "", "   ")
-	err = ioutil.WriteFile("config.json", jsonDataJSON, 0644)
+	err := ioutil.WriteFile("config.json", jsonDataJSON, 0644)
+	if err != nil {
+		panic(err.Error())
+	}
 	return nil
 }
 
@@ -113,7 +111,7 @@ func checkConfigValues() {
 	}
 
 	// Check output name
-	if len(Config.OutputFileName) == 0 {
-		Config.OutputFileName = "output.json"
+	if len(Config.OutputFilename) == 0 {
+		Config.OutputFilename = "output.json"
 	}
 }

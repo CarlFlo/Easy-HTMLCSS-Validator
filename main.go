@@ -68,7 +68,7 @@ func main() {
 
 	// Output result to file
 	jsonDataJSON, _ := json.MarshalIndent(list, "", "   ")
-	ioutil.WriteFile(functions.Config.OutputFileName, jsonDataJSON, 0644)
+	ioutil.WriteFile(functions.Config.OutputFilename, jsonDataJSON, 0644)
 
 	functions.SleepMs(9000000) // So the windows wont close. Change this later
 }

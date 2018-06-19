@@ -101,5 +101,5 @@ func showResult(list *Work) {
 			fmt.Println("")
 		}
 	}
-	fmt.Println("\n\nVerify done!\nResult has been saved to", Config.OutputFileName)
+	fmt.Println("\n\nVerify done!\nResult has been saved to", Config.OutputFilename)
 }
