@@ -28,7 +28,8 @@ func DoProject(list *Work, index int, wg *sync.WaitGroup, wgUI *sync.WaitGroup) 
 			return
 		}
 
-		//
+		// Post not working for some reason
+		// ValidateHTML5Web(string(html), &list.Projects[index].HTMLs[i])
 
 		if Config.ValidateWithHTML5_verySlow {
 			err = ValidateHTML5(string(html), &list.Projects[index].HTMLs[i])

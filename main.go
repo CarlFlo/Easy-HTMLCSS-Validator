@@ -1,6 +1,7 @@
 package main
 
 import (
+	"math/rand"
 	"os"
 	"runtime"
 	"sync"
@@ -14,6 +15,7 @@ func init() {
 	//functions.SleepMs(4000)
 	//functions.SetCmdSize("150", "25")
 	functions.Clear()
+	rand.Seed(time.Now().UTC().UnixNano())
 	functions.ReadConfig()
 	if functions.Config.MakeHelpTxt {
 		functions.MakeHelpFile()

@@ -1,7 +1,9 @@
 package functions
 
 import (
+	"encoding/json"
 	"fmt"
+	"io/ioutil"
 	"runtime"
 )
 
@@ -67,33 +69,42 @@ func showResult(list *Work) {
 
 		for val, htmlFile := range project.HTMLs {
 			// Filepath
-			fmt.Println(fmt.Sprintf("[%d] File: %s", val+1, htmlFile.Path))
+			fmt.Println(fmt.Sprintf("File [%d]: %s", val+1, htmlFile.Path))
 
 			// HTML5
 			fmt.Println("\n[HTML5]:")
 			if htmlFile.HTML5Verify.ErrorValidating != nil {
 				fmt.Println("Error validating:", htmlFile.HTML5Verify.ErrorValidating.Error())
 			} else if htmlFile.HTML5Verify.HasWarningsOrErrors {
-				fmt.Println("NOT OK")
+				fmt.Println("NOT OK") // Currently never run. Its ok or error. Fix later
 			} else {
 				fmt.Println("OK")
 			}
 
-			// Strict Errors
-			fmt.Println("\n[XHTML 1.0 Strict]:")
-			fmt.Println("Errors:", htmlFile.StrictVerify.TotalErrors)
-			for k, v := range htmlFile.StrictVerify.Errors {
-				fmt.Println(fmt.Sprintf("%d: %s", k, v))
-			}
+			// XHTML 1.0 Strict
+			fmt.Println(fmt.Sprintf("\n[XHTML 1.0 Strict]: %s", htmlFile.StrictVerify.Result))
 			// Strict Warnings
-			fmt.Println("\nWarnings:", htmlFile.StrictVerify.TotalWarnings)
-
+			fmt.Println(" [Warnings]:")
 			for k, v := range htmlFile.StrictVerify.Warnings {
-				fmt.Println(fmt.Sprintf("%d: %s", k, v))
+				fmt.Println(fmt.Sprintf("  [%d]: %s", k, v))
+			}
+			// Strict info
+			fmt.Println("\n [Info]:")
+			for k, v := range htmlFile.StrictVerify.Infos {
+				fmt.Println(fmt.Sprintf("  [%d]: %s", k, v))
+			}
+			fmt.Println("\n [Errors]:")
+			for k, errStrArr := range htmlFile.StrictVerify.Errors { // todo look at this
+				fmt.Println(fmt.Sprintf("  Group %d: %s\n", k, errStrArr.ErrorType))
+				for nr, val := range errStrArr.ErrorStrings {
+					fmt.Println(fmt.Sprintf("   [%d]:\n    Line:%s\n    Error:%s\n    Text:%s\n", nr, val.Line, val.Error, val.TextFromHTML))
+				}
 			}
 
 			fmt.Println("")
 		}
 	}
 	fmt.Println("\n\nDone!")
+	jsonDataJSON, _ := json.MarshalIndent(list, "", "   ")
+	ioutil.WriteFile("data.json", jsonDataJSON, 0644)
 }

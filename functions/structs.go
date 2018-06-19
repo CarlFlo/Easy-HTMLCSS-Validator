@@ -27,21 +27,15 @@ type HTMLVerify struct {
 	AllVerified  bool         // If file has been verified for both strict and html5
 	StrictVerify StrictVerify // For XHTML 1.0 Strict
 	HTML5Verify  HTML5Verify  // For HTML5
-	/*
-		Warnings      []string     // All warnings
-		TotalWarnings int
-		Errors        []string // All errors
-		TotalErrors   int
-	*/
 }
 
 // StrictVerify holds data for the XHTML 1.0 Strict verify
 type StrictVerify struct {
-	Verified      bool     // If file has been verified
-	Warnings      []string // All warnings
-	TotalWarnings int
-	Errors        []string // All errors
-	TotalErrors   int
+	Verified bool // If file has been verified
+	Result   string
+	Errors   []ErrorGroup
+	Warnings []string // All warnings
+	Infos    []string
 }
 
 // HTML5Verify holds if file has warnings/errors for the HTML5. Should have none if ok
@@ -61,8 +55,15 @@ type CSSVerify struct {
 
 // ErrorGroup holds an error group. Its type as string and the errors as []string
 type ErrorGroup struct {
-	errorType    string
-	errorStrings []string
+	ErrorType    string
+	ErrorStrings []TheError
+}
+
+// TheError keeps the error data
+type TheError struct {
+	Line         string // The row and the title of the error
+	Error        string
+	TextFromHTML string // From the html doc itself
 }
 
 // Timing holds when the validation was started and when it was finished
