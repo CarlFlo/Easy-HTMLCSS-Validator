@@ -30,6 +30,8 @@ func createString() []byte {
 	buffer.WriteString("\nfolderName: The folder name the program will use for bulk validation")
 	buffer.WriteString("\noutputFilename: ")
 	buffer.WriteString("\ndispConfigOnStart: will display config on start with a small delay for reading it (3.5 seconds).")
+	buffer.WriteString("\ndisplayResult: If verify result should be printed when done")
+	buffer.WriteString("\nkeepOpenInSeconds: How long in seconds that the program will stay open after completion")
 	buffer.WriteString("\nmakeHelpTxt: If this txt file is to be created (def=true)")
 	buffer.WriteString("\ndeleteUnzipedFolder: If true then .zip folders extracted data is deleted after use")
 	buffer.WriteString("\nvalidateWithHTML5_verySlow: Requires sava installed and in Path and vnu.jar in the same folder as exe")

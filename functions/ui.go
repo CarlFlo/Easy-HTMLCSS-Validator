@@ -60,7 +60,7 @@ func UpdateScreen(list *Work) {
 		showResult(list)
 	}
 	// End message
-	fmt.Println("\n\nVerify done!\nResult has been saved to", Config.OutputFilename)
+	fmt.Println("\n\nVerify done!\nResult has been saved to", Config.OutputFilename, "\nWindow will close in", Config.KeepOpenInSeconds, "seconds")
 }
 
 // ShowResult shows the result of the validation

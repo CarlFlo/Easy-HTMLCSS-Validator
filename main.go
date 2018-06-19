@@ -100,5 +100,5 @@ func main() {
 		ioutil.WriteFile(functions.Config.OutputFilename, jsonDataJSON, 0644)
 	}
 
-	functions.SleepMs(9000000) // So the windows wont close. Change this later
+	functions.SleepMs(time.Duration(functions.Config.KeepOpenInSeconds * 1000)) // So the windows wont close.
 }

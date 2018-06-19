@@ -18,6 +18,7 @@ type configStruct struct {
 	OutputFilename             string        `json:"outputFilename"`
 	DispConfigOnStart          bool          `json:"dispConfigOnStart"`
 	DisplayResult              bool          `json:"displayResult"`
+	KeepOpenInSeconds          int           `json:"keepOpenInSeconds"`
 	MakeHelpTxt                bool          `json:"makeHelpTxt"`
 	DeleteUnzipedFolder        bool          `json:"deleteUnzipedFolder"`
 	ValidateWithHTML5_verySlow bool          `json:validateWithHTML5_verySlow`
@@ -80,6 +81,7 @@ func createConfig() error {
 		OutputFilename:             "output.json",
 		DispConfigOnStart:          true,
 		DisplayResult:              true,
+		KeepOpenInSeconds:          120,
 		MakeHelpTxt:                true,
 		DeleteUnzipedFolder:        true,
 		ValidateWithHTML5_verySlow: false,
@@ -110,6 +112,10 @@ func checkConfigValues() {
 	} else if Config.UpdateUIMs > 1000 {
 		Config.UpdateUIMs = 1000
 		fmt.Println("\"updateUIMs\" in config was invalid and thus changed to:", Config.UpdateUIMs)
+	}
+
+	if Config.KeepOpenInSeconds < 0 {
+		Config.KeepOpenInSeconds = 120
 	}
 
 	// Check output name
