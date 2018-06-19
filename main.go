@@ -39,12 +39,13 @@ func main() {
 		GracefulStop: false,
 	}
 
-	// gracefulStop
+	// Graceful stop - catches (ctrl + c)
 	var gracefulStop = make(chan os.Signal, 1)
 	signal.Notify(gracefulStop, os.Interrupt, os.Kill)
 	go func() {
 		sig := <-gracefulStop
 
+		// Program is done. No need to preforme the code under
 		if list.Complete {
 			os.Exit(1)
 			return
