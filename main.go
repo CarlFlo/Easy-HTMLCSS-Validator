@@ -1,6 +1,8 @@
 package main
 
 import (
+	"encoding/json"
+	"io/ioutil"
 	"math/rand"
 	"os"
 	"runtime"
@@ -61,7 +63,12 @@ func main() {
 
 	wg.Wait()
 	list.Timing.EndTime = time.Now()
+	list.Timing.Duration = list.Timing.EndTime.Sub(list.Timing.StartTime)
 	list.Complete = true
+
+	// Output result to file
+	jsonDataJSON, _ := json.MarshalIndent(list, "", "   ")
+	ioutil.WriteFile(functions.Config.OutputFileName, jsonDataJSON, 0644)
 
 	functions.SleepMs(9000000) // So the windows wont close. Change this later
 }

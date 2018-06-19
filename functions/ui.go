@@ -1,9 +1,7 @@
 package functions
 
 import (
-	"encoding/json"
 	"fmt"
-	"io/ioutil"
 	"runtime"
 )
 
@@ -100,11 +98,8 @@ func showResult(list *Work) {
 					fmt.Println(fmt.Sprintf("   [%d]:\n    Line:%s\n    Error:%s\n    Text:%s\n", nr, val.Line, val.Error, val.TextFromHTML))
 				}
 			}
-
 			fmt.Println("")
 		}
 	}
-	fmt.Println("\n\nDone!")
-	jsonDataJSON, _ := json.MarshalIndent(list, "", "   ")
-	ioutil.WriteFile("data.json", jsonDataJSON, 0644)
+	fmt.Println("\n\nVerify done!\nResult has been saved to", Config.OutputFileName)
 }

@@ -81,6 +81,8 @@ func parseGroupMessages(body []byte, singleHTML *HTMLVerify) {
 		// Save group data
 		singleHTML.StrictVerify.Errors = append(singleHTML.StrictVerify.Errors, errorGroup)
 	})
+
+	singleHTML.StrictVerify.Verified = true
 }
 
 // Removed extra spaces from string to clean it up

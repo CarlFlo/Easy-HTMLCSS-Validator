@@ -70,4 +70,5 @@ type TheError struct {
 type Timing struct {
 	StartTime time.Time
 	EndTime   time.Time
+	Duration  time.Duration
 }

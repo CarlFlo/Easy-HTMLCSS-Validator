@@ -15,6 +15,7 @@ var Config *configStruct
 type configStruct struct {
 	Cores                      int           `json:"cores"` // Hur många cores som go rutines får använda
 	FolderName                 string        `json:"folderName"`
+	OutputFileName             string        `json:"outputFileName"`
 	DispConfigOnStart          bool          `json:"dispConfigOnStart"`
 	MakeHelpTxt                bool          `json:"makeHelpTxt"`
 	DeleteUnzipedFolder        bool          `json:"deleteUnzipedFolder"`
@@ -73,6 +74,7 @@ func createConfig() error {
 	jsonData := []byte(`{
 		"cores": 2,
 		"folderName": "Projects",
+		"outputFileName": "output.json",
 		"dispConfigOnStart": true,
 		"makeHelpTxt": true,
 		"deleteUnzipedFolder": true,
@@ -108,5 +110,10 @@ func checkConfigValues() {
 	} else if Config.UpdateUIMs > 1000 {
 		Config.UpdateUIMs = 1000
 		fmt.Println("\"updateUIMs\" in config was invalid and thus changed to:", Config.UpdateUIMs)
+	}
+
+	// Check output name
+	if len(Config.OutputFileName) == 0 {
+		Config.OutputFileName = "output.json"
 	}
 }
