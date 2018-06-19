@@ -26,6 +26,11 @@ func UpdateScreen(list *Work) {
 			another = true
 		}
 
+		// Kill this goroutines
+		if list.GracefulStop {
+			ExitGoroutine()
+		}
+
 		Clear()
 		totalDone = 0
 		for i := 0; i < len(list.Projects); i++ {
@@ -50,7 +55,12 @@ func UpdateScreen(list *Work) {
 
 		SleepMs(Config.UpdateUIMs)
 	}
-	showResult(list)
+
+	if Config.DisplayResult {
+		showResult(list)
+	}
+	// End message
+	fmt.Println("\n\nVerify done!\nResult has been saved to", Config.OutputFilename)
 }
 
 // ShowResult shows the result of the validation
@@ -101,5 +111,4 @@ func showResult(list *Work) {
 			fmt.Println("")
 		}
 	}
-	fmt.Println("\n\nVerify done!\nResult has been saved to", Config.OutputFilename)
 }

@@ -17,6 +17,7 @@ type configStruct struct {
 	FolderName                 string        `json:"folderName"`
 	OutputFilename             string        `json:"outputFilename"`
 	DispConfigOnStart          bool          `json:"dispConfigOnStart"`
+	DisplayResult              bool          `json:"displayResult"`
 	MakeHelpTxt                bool          `json:"makeHelpTxt"`
 	DeleteUnzipedFolder        bool          `json:"deleteUnzipedFolder"`
 	ValidateWithHTML5_verySlow bool          `json:validateWithHTML5_verySlow`
@@ -78,6 +79,7 @@ func createConfig() error {
 		FolderName:                 "Projects",
 		OutputFilename:             "output.json",
 		DispConfigOnStart:          true,
+		DisplayResult:              true,
 		MakeHelpTxt:                true,
 		DeleteUnzipedFolder:        true,
 		ValidateWithHTML5_verySlow: false,

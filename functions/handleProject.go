@@ -22,6 +22,10 @@ func DoProject(list *Work, index int, wg *sync.WaitGroup, wgUI *sync.WaitGroup) 
 	// Will iterate thru all html pages that were found
 	for i := 0; i < len(list.Projects[index].HTMLs); i++ {
 
+		if list.GracefulStop {
+			ExitGoroutine()
+		}
+
 		html, err := ioutil.ReadFile(list.Projects[index].HTMLs[i].Path)
 		if err != nil {
 			log.Printf("%s - %v", list.Projects[index].FolderName, err.Error())

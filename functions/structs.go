@@ -1,16 +1,15 @@
 package functions
 
 import (
-	"sync"
 	"time"
 )
 
 // Work holds the data of everything
 type Work struct {
-	Mutex    sync.Mutex // For potential races when writing to Projects
-	Projects []Project
-	Complete bool
-	Timing   Timing
+	Complete     bool
+	GracefulStop bool
+	Timing       Timing
+	Projects     []Project
 }
 
 // Project Holds one projects and its html file paths

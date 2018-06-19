@@ -2,9 +2,11 @@ package main
 
 import (
 	"encoding/json"
+	"fmt"
 	"io/ioutil"
 	"math/rand"
 	"os"
+	"os/signal"
 	"runtime"
 	"sync"
 	"time"
@@ -29,13 +31,35 @@ func init() {
 func main() {
 
 	list := &functions.Work{
-		Mutex:    sync.Mutex{},
 		Projects: []functions.Project{},
 		Complete: false,
 		Timing: functions.Timing{
 			StartTime: time.Now(),
 		},
+		GracefulStop: false,
 	}
+
+	// gracefulStop
+	var gracefulStop = make(chan os.Signal, 1)
+	signal.Notify(gracefulStop, os.Interrupt, os.Kill)
+	go func() {
+		sig := <-gracefulStop
+
+		if list.Complete {
+			os.Exit(1)
+			return
+		}
+
+		// set list to abort mode
+		list.GracefulStop = true
+		functions.Clear()
+		fmt.Println(fmt.Sprintf("Caught signal: %+v\nWait for 3 second to finish processing", sig))
+		functions.SleepMs(3000)
+		// Output result to file
+		jsonDataJSON, _ := json.MarshalIndent(list, "", "   ")
+		ioutil.WriteFile(fmt.Sprintf("aborted-%s", functions.Config.OutputFilename), jsonDataJSON, 0644)
+		os.Exit(1)
+	}()
 
 	/* Fix singleVerify */
 
@@ -64,11 +88,16 @@ func main() {
 	wg.Wait()
 	list.Timing.EndTime = time.Now()
 	list.Timing.Duration = list.Timing.EndTime.Sub(list.Timing.StartTime)
-	list.Complete = true
 
-	// Output result to file
-	jsonDataJSON, _ := json.MarshalIndent(list, "", "   ")
-	ioutil.WriteFile(functions.Config.OutputFilename, jsonDataJSON, 0644)
+	// Do not preforme code if program was aborted mid run
+	if !list.GracefulStop {
+
+		list.Complete = true
+
+		// Output result to file
+		jsonDataJSON, _ := json.MarshalIndent(list, "", "   ")
+		ioutil.WriteFile(functions.Config.OutputFilename, jsonDataJSON, 0644)
+	}
 
 	functions.SleepMs(9000000) // So the windows wont close. Change this later
 }

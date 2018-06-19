@@ -28,6 +28,10 @@ func Clear() {
 	}
 }
 
+func ExitGoroutine() {
+	runtime.Goexit()
+}
+
 // SleepMs will sleep for n milliseconds
 func SleepMs(n time.Duration) {
 	time.Sleep(time.Millisecond * n)
