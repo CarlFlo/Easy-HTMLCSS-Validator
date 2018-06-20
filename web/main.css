@@ -1,0 +1,23 @@
+#folderName {
+  color: orange;
+}
+
+.hasProblems h3 {
+  color: red;
+}
+
+.noProblems h3 {
+  color: #22a74e;
+}
+
+ul li {
+  color: white;
+}
+
+p {
+  color: white;
+}
+
+body {
+  background: black;
+}
