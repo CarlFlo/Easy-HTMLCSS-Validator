@@ -13,17 +13,17 @@ import (
 var Config *configStruct
 
 type configStruct struct {
-	Cores                      int           `json:"cores"` // Hur många cores som go rutines får använda
-	FolderName                 string        `json:"folderName"`
-	OutputFilename             string        `json:"outputFilename"`
-	DispConfigOnStart          bool          `json:"dispConfigOnStart"`
-	DisplayResult              bool          `json:"displayResult"`
-	KeepOpenInSeconds          int           `json:"keepOpenInSeconds"`
-	MakeHelpTxt                bool          `json:"makeHelpTxt"`
-	DeleteUnzipedFolder        bool          `json:"deleteUnzipedFolder"`
-	ValidateWithHTML5_verySlow bool          `json:validateWithHTML5_verySlow`
-	DrawUI                     bool          `json:"drawUI"`
-	UpdateUIMs                 time.Duration `json:"updateUIMs"`
+	Cores               int           `json:"cores"` // Hur många cores som go rutines får använda
+	FolderName          string        `json:"folderName"`
+	OutputFilename      string        `json:"outputFilename"`
+	DispConfigOnStart   bool          `json:"dispConfigOnStart"`
+	DisplayResult       bool          `json:"displayResult"`
+	OpenResultWeb       bool          `json:"openResultWeb"` // opens a custom website that loads the json file to display it
+	KeepOpenInSeconds   int           `json:"keepOpenInSeconds"`
+	MakeHelpTxt         bool          `json:"makeHelpTxt"`
+	DeleteUnzipedFolder bool          `json:"deleteUnzipedFolder"`
+	DrawUI              bool          `json:"drawUI"`
+	UpdateUIMs          time.Duration `json:"updateUIMs"`
 }
 
 // ReadConfig försöker läsa configen
@@ -64,7 +64,7 @@ func loadConfig() error {
 	checkConfigValues()
 	if Config.DispConfigOnStart {
 		fmt.Println(string(file)) // This value will not update if checkConfigValues changed anything
-		SleepMs(3500)
+		SleepMs(2500)
 	}
 
 	return nil
@@ -76,17 +76,17 @@ func createConfig() error {
 
 	// Default settings
 	configStruct := configStruct{
-		Cores:                      2,
-		FolderName:                 "Projects",
-		OutputFilename:             "output.json",
-		DispConfigOnStart:          true,
-		DisplayResult:              true,
-		KeepOpenInSeconds:          120,
-		MakeHelpTxt:                true,
-		DeleteUnzipedFolder:        true,
-		ValidateWithHTML5_verySlow: false,
-		DrawUI:     true,
-		UpdateUIMs: 50,
+		Cores:               2,
+		FolderName:          "toValidate",
+		OutputFilename:      "output.js",
+		DispConfigOnStart:   true,
+		DisplayResult:       true,
+		OpenResultWeb:       true,
+		KeepOpenInSeconds:   120,
+		MakeHelpTxt:         true,
+		DeleteUnzipedFolder: true,
+		DrawUI:              true,
+		UpdateUIMs:          50,
 	}
 
 	jsonDataJSON, _ := json.MarshalIndent(configStruct, "", "   ")

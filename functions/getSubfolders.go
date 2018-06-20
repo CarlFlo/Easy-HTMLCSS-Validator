@@ -32,6 +32,7 @@ func WalkHTML(project *Project) {
 			return err
 		}
 		if !info.IsDir() {
+			// Finds html
 			if strings.EqualFold(info.Name()[len(info.Name())-4:], "html") {
 				// Lägg till hela sökvägen till html filen i HTMLs arrayen
 				project.HTMLs = append(project.HTMLs, HTMLVerify{
@@ -43,6 +44,14 @@ func WalkHTML(project *Project) {
 					HTML5Verify: HTML5Verify{
 						Verified: false,
 					},
+				})
+			} else if strings.EqualFold(info.Name()[len(info.Name())-3:], "css") {
+				// Finds css
+				project.CSSs = append(project.CSSs, CSSVerify{
+					Path:                path,
+					Verified:            false,
+					HasWarningsOrErrors: false,
+					ErrorValidating:     nil,
 				})
 			}
 

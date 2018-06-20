@@ -34,7 +34,7 @@ func CheckPath() {
 	}
 }
 
-// PopulateProjectArr Hämtar alla mappnamn i path
+// PopulateProjectArr populates the list with html for that folder
 func PopulateProjectArr(list *Work) {
 
 	files, err := ioutil.ReadDir(fmt.Sprintf("./%s/", Config.FolderName))
@@ -44,7 +44,6 @@ func PopulateProjectArr(list *Work) {
 
 	fmt.Println(fmt.Sprintf("Totalt %d st mappar i %s:\n", len(files), Config.FolderName))
 
-	i := 0
 	for _, f := range files {
 
 		if !f.IsDir() { // skips everything that isnt a folder
@@ -56,8 +55,7 @@ func PopulateProjectArr(list *Work) {
 			Done:       false,
 			FolderName: f.Name(),
 			HTMLs:      []HTMLVerify{},
+			CSSs:       []CSSVerify{},
 		})
-
-		i++
 	}
 }

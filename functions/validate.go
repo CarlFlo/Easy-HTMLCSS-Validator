@@ -1,24 +1,16 @@
 package functions
 
 import (
-	"fmt"
+	"bytes"
 	"io/ioutil"
 	"log"
+	"mime/multipart"
 	"net/http"
 	"net/url"
-	"os/exec"
-	"strings"
 )
 
 // ValidateHTMLStrict will validate html with the server for XHTML 1.0 Strict
 func ValidateHTMLStrict(html string, singleHTML *HTMLVerify) error {
-	/*
-		// DEBUG
-		ParseHTML("", singleHTML)
-		runtime.Goexit()
-		return nil
-		// DEBUG END
-	*/
 
 	resp, err := http.PostForm("https://validator.w3.org/check",
 		url.Values{ // name
@@ -43,75 +35,107 @@ func ValidateHTMLStrict(html string, singleHTML *HTMLVerify) error {
 	}
 
 	// Parses the html code
-	ParseHTML(string(body), singleHTML)
+	parseHTML(string(body), singleHTML)
 
 	return nil
 }
 
-// ValidateHTML5Web will validate html with the server for XHTML 1.0 Strict
-func ValidateHTML5Web(html string, singleHTML *HTMLVerify) error {
+// validateHTML5 will validate html with the server for XHTML 1.0 Strict
+func validateHTML5(html string, singleHTML *HTMLVerify) error {
 
-	resp, err := http.PostForm("https://validator.w3.org/check",
-		url.Values{
-			"fragment":        {html}, // HTML koden
-			"prefill":         {"0"},
-			"doctype":         {"Inline"},  // "HTML5" eller "XHTML 1.0 Strict"
-			"prefill_doctype": {"html401"}, // "HTML5" eller "XHTML 1.0 Strict"
-			"group":           {"1"},       // Gruppera felen tillsammans
-		})
-
-	if err != nil {
-		log.Println(err.Error())
-		return err
-	}
-	defer resp.Body.Close()
-
-	body, err := ioutil.ReadAll(resp.Body)
-	if err != nil {
-		log.Println(err.Error())
-		return err
+	extraParams := map[string]string{
+		"fragment":        html,
+		"doctype":         "Inline",
+		"group":           "1",
+		"prefill":         "0",
+		"prefill_doctype": "html401",
+		"showsource":      "no",
 	}
 
-	// Parses the html code
-	ParseHTML(string(body), singleHTML)
-
-	/* // Debug for now. This will save return html to a file*/
-
-	name := strings.Split(singleHTML.Path, "\\")
-	ioutil.WriteFile(string(fmt.Sprintf("./Done-html5-%s-%v", RandomString(4), name[len(name)-1])), body, 0644) // debug
-
-	return nil
-}
-
-// Very slow and demanding
-// ValidateHTML5 will validate html with jar file for html5
-func ValidateHTML5(html string, singleHTML *HTMLVerify) error {
-
-	cmd := exec.Command("java", "-jar", "./vnu.jar", "--format", "json", singleHTML.Path)
-
-	out, err := cmd.CombinedOutput()
-
+	request, err := newMultipartForm("https://validator.w3.org/nu/#textarea", extraParams)
 	if err != nil {
-
-		// exit status 1 is also error for when jar file is not found
-		if err.Error() != "exit status 1" { // status 1 is ok, means there were errors in html doc
-			singleHTML.HTML5Verify.ErrorValidating = err
+		log.Fatal(err)
+	}
+	client := &http.Client{}
+	resp, err := client.Do(request)
+	if err != nil {
+		singleHTML.HTML5Verify.Verified = false
+		return err
+	} else {
+		body := &bytes.Buffer{}
+		_, err := body.ReadFrom(resp.Body)
+		if err != nil {
+			singleHTML.HTML5Verify.Verified = false
 			return err
 		}
-	}
+		resp.Body.Close()
 
-	if len(string(out)) > 16 { // Empty json result is 16 long
-		singleHTML.HTML5Verify.HasWarningsOrErrors = true
-	} else {
-		singleHTML.HTML5Verify.HasWarningsOrErrors = false
+		// Check if it has errors here
+
+		// singleHTML.HTML5Verify.HasWarningsOrErrors = true / false
+		txtBody, _ := ioutil.ReadAll(body) // read all
+		parseHTML5(txtBody, singleHTML)
 	}
 	singleHTML.HTML5Verify.Verified = true
-
 	return nil
 }
 
-// ValidateCSS Validates css
-func ValidateCSS(css string, singleHTML *HTMLVerify) error {
+// validateCSS Validates css // Save return error to singleCSS.ErrorValidating variable
+func validateCSS(css string, singleCSS *CSSVerify) error {
+	extraParams := map[string]string{
+		"text":        css,
+		"profile":     "css3svg",
+		"usermedium":  "all",
+		"type":        "none",
+		"warning":     "1",
+		"vextwarning": "",
+		"lang":        "en",
+	}
 
+	request, err := newMultipartForm("https://jigsaw.w3.org/css-validator/validator", extraParams)
+	if err != nil {
+		singleCSS.Verified = false
+		return err
+	}
+	client := &http.Client{}
+	resp, err := client.Do(request)
+	if err != nil {
+		singleCSS.Verified = false
+		return err
+	} else {
+		body := &bytes.Buffer{}
+		_, err := body.ReadFrom(resp.Body)
+		if err != nil {
+			singleCSS.Verified = false
+			return err
+		}
+		resp.Body.Close()
+
+		// Read all
+		txtBody, _ := ioutil.ReadAll(body)
+
+		// Check if it has errors here
+		parseCSS(txtBody, singleCSS)
+	}
+	singleCSS.Verified = true
 	return nil
+}
+
+// Creates the form data
+func newMultipartForm(uri string, params map[string]string) (*http.Request, error) {
+
+	body := &bytes.Buffer{}
+	writer := multipart.NewWriter(body)
+
+	for key, val := range params {
+		_ = writer.WriteField(key, val)
+	}
+	err := writer.Close()
+	if err != nil {
+		return nil, err
+	}
+
+	req, err := http.NewRequest("POST", uri, body)
+	req.Header.Set("Content-Type", writer.FormDataContentType())
+	return req, err
 }

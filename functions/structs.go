@@ -28,6 +28,14 @@ type HTMLVerify struct {
 	HTML5Verify  HTML5Verify  // For HTML5
 }
 
+// CSSVerify holds if css file(s) has warnings/errors for the CSS. Should have none if ok
+type CSSVerify struct {
+	Path                string // Path to css file
+	Verified            bool   // If file has been verified
+	HasWarningsOrErrors bool   // Has warnings or errors
+	ErrorValidating     error  // This makes "Verified" redundant
+}
+
 // StrictVerify holds data for the XHTML 1.0 Strict verify
 type StrictVerify struct {
 	Verified bool // If file has been verified
@@ -39,17 +47,9 @@ type StrictVerify struct {
 
 // HTML5Verify holds if file has warnings/errors for the HTML5. Should have none if ok
 type HTML5Verify struct {
-	Verified            bool // If file has been verified
-	HasWarningsOrErrors bool // File has warnings
-	ErrorValidating     error
-}
-
-// CSSVerify holds if css file(s) has warnings/errors for the CSS. Should have none if ok
-type CSSVerify struct {
-	Path        string // Path to css file
-	Verified    bool   // If file has been verified
-	HasWarnings bool   // File has warnings
-	HasErrors   bool   // File has errors
+	Verified            bool  // If file has been verified
+	HasWarningsOrErrors bool  // File has warnings
+	ErrorValidating     error // This makes "Verified" redundant
 }
 
 // ErrorGroup holds an error group. Its type as string and the errors as []string

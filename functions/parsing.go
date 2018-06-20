@@ -4,12 +4,13 @@ import (
 	"bytes"
 	"log"
 	"regexp"
+	"strings"
 
 	"github.com/PuerkitoBio/goquery"
 )
 
-// ParseHTML will parse raw html
-func ParseHTML(html string, singleHTML *HTMLVerify) {
+// parseHTML will parse raw html
+func parseHTML(html string, singleHTML *HTMLVerify) {
 
 	// Parses for XHTML 1.0 Strict
 	parseGroupMessages([]byte(html), singleHTML)
@@ -21,12 +22,7 @@ func ParseHTML(html string, singleHTML *HTMLVerify) {
 // Will parse all the group messages
 func parseGroupMessages(body []byte, singleHTML *HTMLVerify) {
 
-	// Debugging
-	//ioutil.WriteFile("download.html", body, 0644)	// save verified html file
-	//f, _ := ioutil.ReadFile("./download.html")
-
 	doc, err := goquery.NewDocumentFromReader(bytes.NewReader(body))
-	//doc, err := goquery.NewDocumentFromReader(bytes.NewReader(f)) // debug read from file
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -83,6 +79,22 @@ func parseGroupMessages(body []byte, singleHTML *HTMLVerify) {
 	})
 
 	singleHTML.StrictVerify.Verified = true
+}
+
+func parseHTML5(html []byte, singleHTML *HTMLVerify) {
+
+	if strings.Contains(string(html), "There were errors") {
+		// Found error(s)
+		singleHTML.HTML5Verify.HasWarningsOrErrors = true
+	}
+}
+
+func parseCSS(css []byte, singleCSS *CSSVerify) {
+
+	if strings.Contains(string(css), "Sorry! We found the following errors") {
+		// Found error(s)
+		singleCSS.HasWarningsOrErrors = true
+	}
 }
 
 // Removed extra spaces from string to clean it up

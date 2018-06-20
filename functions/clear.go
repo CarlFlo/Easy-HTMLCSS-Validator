@@ -28,6 +28,7 @@ func Clear() {
 	}
 }
 
+// ExitGoroutine will stop the goroutine that calls this function
 func ExitGoroutine() {
 	runtime.Goexit()
 }
