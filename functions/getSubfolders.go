@@ -54,8 +54,8 @@ func WalkHTML(project *Project) {
 					ErrorValidating:     nil,
 				})
 			}
-
 		}
+
 		return nil
 	})
 

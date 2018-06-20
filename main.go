@@ -52,24 +52,27 @@ func main() {
 
 		// set list to abort mode
 		list.GracefulStop = true
+		if !functions.Config.GracefulStop { //	If false then just stop the program on ctrl+c
+			os.Exit(1)
+		}
 		functions.Clear()
 		fmt.Println(fmt.Sprintf("Caught signal: %+v\nWait for 3 second to finish processing", sig))
 		functions.SleepMs(3000)
 		// Output result to file
 		jsonDataJSON, _ := json.MarshalIndent(list, "", "   ")
-		ioutil.WriteFile(fmt.Sprintf("aborted-%s", functions.Config.OutputFilename), jsonDataJSON, 0644)
+		ioutil.WriteFile(fmt.Sprintf("interrupted-%s", functions.Config.OutputFilename), jsonDataJSON, 0644)
 		os.Exit(1)
 	}()
 
-	/* todo: Fix singleVerify */
-
 	// Test
-	os.Args = append(os.Args, "C:\\Users\\Carl\\Dropbox\\Kod\\Go\\Projects\\W3 validator - golang\\bin\\projectZip.zip")
+	os.Args = append(os.Args, "D:\\Dropbox\\Kod\\Go\\Projects\\W3 validator - golang\\bin\\projectZip.zip")
 
 	// For when user drags in a folder or .zip file onto the exe file for single verify
 	if len(os.Args) > 1 {
-		functions.HandleSingle(list) // Fix
+		functions.HandleSingle(list)
 		functions.SaveResult(list)
+		// So the windows wont close.
+		functions.SleepMs(time.Duration(functions.Config.KeepOpenInSeconds * 1000))
 		return
 	}
 
@@ -101,7 +104,6 @@ func main() {
 	if !list.GracefulStop {
 
 		list.Complete = true
-
 		functions.SaveResult(list)
 	}
 

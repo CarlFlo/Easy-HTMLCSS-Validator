@@ -8,13 +8,10 @@ import (
 
 // DoProject går igenom ett project
 func DoProject(list *Work, index int, wg *sync.WaitGroup, wgUI *sync.WaitGroup) {
-
+	defer wg.Done() // defer is done at the end before return
 	// Retreves all files in that path and its sub paths
 	WalkHTML(&list.Projects[index])
-	if !SingleProjectMode {
-		defer wg.Done() // defer is done at the end before return
-		wgUI.Done()
-	}
+	wgUI.Done()
 
 	if len(list.Projects[index].HTMLs) == 0 {
 		log.Printf("%s has no html files!", list.Projects[index].FolderName)

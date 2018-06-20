@@ -23,7 +23,9 @@ func HandleSingle(list *Work) {
 	// Check if its the same dir, will not work if different drive. Maybe not needed
 	if !strings.Contains(argsWithoutProg[0], fullPath) {
 		fmt.Println("Bad path! Place zip or folder in the same location as the exe file")
-		SleepMs(5000)
+		fmt.Println("\nProgram path:", argsWithoutProg[0])
+		fmt.Println("file path: ", fullPath)
+		SleepMs(time.Duration(Config.KeepOpenInSeconds * 1000))
 		return
 	}
 
@@ -36,7 +38,6 @@ func HandleSingle(list *Work) {
 		relativePath = newPath
 		if Config.DeleteUnzipedFolder {
 			defer deleteUnzippedFolder(relativePath)
-			defer SaveResult(list)
 		}
 	}
 
@@ -47,12 +48,22 @@ func HandleSingle(list *Work) {
 		CSSs:       []CSSVerify{},
 	})
 
-	go UpdateScreen(list)                                    // the ui
-	DoProject(list, 0, &sync.WaitGroup{}, &sync.WaitGroup{}) // These WaitGroup are not needed/used when doing 1 project but func needs them
+	// syncing
+	var wg = sync.WaitGroup{}
+	var wgUI = sync.WaitGroup{}
+
+	wg.Add(1)
+	wgUI.Add(1)
+	go DoProject(list, 0, &wg, &wgUI)
+
+	wgUI.Wait()           // Wait until all html files has been found and loaded
+	go UpdateScreen(list) // the ui
+
+	wg.Wait()
+	list.Complete = true
 }
 
 func deleteUnzippedFolder(path string) {
 	fmt.Println("Delete:", path)
 	os.RemoveAll(path)
-	time.Sleep(time.Second * 120)
 }

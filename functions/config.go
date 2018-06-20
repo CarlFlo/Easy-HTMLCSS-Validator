@@ -16,6 +16,7 @@ type configStruct struct {
 	Cores               int           `json:"cores"` // Hur många cores som go rutines får använda
 	FolderName          string        `json:"folderName"`
 	OutputFilename      string        `json:"outputFilename"`
+	GracefulStop        bool          `json:"gracefulStop"`
 	DispConfigOnStart   bool          `json:"dispConfigOnStart"`
 	DisplayResult       bool          `json:"displayResult"`
 	OpenResultWeb       bool          `json:"openResultWeb"` // opens a custom website that loads the json file to display it
@@ -79,6 +80,7 @@ func createConfig() error {
 		Cores:               2,
 		FolderName:          "toValidate",
 		OutputFilename:      "output.js",
+		GracefulStop:        true,
 		DispConfigOnStart:   true,
 		DisplayResult:       true,
 		OpenResultWeb:       true,

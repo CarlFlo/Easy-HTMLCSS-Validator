@@ -10,7 +10,6 @@ func UpdateScreen(list *Work) {
 	if !Config.DrawUI {
 		return
 	}
-
 	// Calculate the total amount of html docs to process
 	totalHTMLFiles := 0
 	totalDone := 0
