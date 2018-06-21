@@ -1,7 +1,6 @@
 # Bulk html Validator
-Validates html in bulk
+Validates html using the W3 standard for html5 and XHTML 1.0 Strict and presents it in a easy to read way
 
-1.0
 ## How to
 ### Usage
 1. Place folder(s) in the folder that the executable created on its first run to validate them all
