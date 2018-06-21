@@ -1,5 +1,5 @@
 # Bulk html Validator
-Validates html using the W3 standard for html5 and XHTML 1.0 Strict and presents it in a easy to read way
+Validates html and css using the W3 standard for html5 and XHTML 1.0 Strict and presents it in a easy to read way
 
 ## How to
 ### Usage
