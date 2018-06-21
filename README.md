@@ -17,4 +17,6 @@ Validates html in bulk
 
 
 Get it by [going here](https://github.com/PuerkitoBio/goquery) or type the following in cmd:
-##### go get -u github.com/PuerkitoBio/goquery
+```
+go get -u github.com/PuerkitoBio/goquery
+```
