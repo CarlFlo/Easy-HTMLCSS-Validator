@@ -4,11 +4,11 @@ Validates html in bulk
 1.0
 ## How to
 ### Usage
-1. place folder(s) in the folder that the executable created on its first run to validate them all
+1. Place folder(s) in the folder that the executable created on its first run to validate them all
 2. Drag a .zip file or folder onto the executable. Be in the same folder as the executable for it to use the config file
 
 ### Result webpage
-* place web folder in the same folder as the executable
+* Place web folder in the same folder as the executable
 
 
 ## REQUIREMENTS
