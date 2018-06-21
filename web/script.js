@@ -11,13 +11,24 @@
     // Add eventlisteners to every "button" for expand and collapse
     let list = document.getElementsByClassName("expandCollapse"); // expandCollapse
     for (let i = 0; i < list.length; i++) {
+      list[i].classList.add("isExpanded");
+
+      // Removed need for first time doubleclick to enable the feature on each button
+      let tmp = list[i].nextElementSibling;
+      tmp.style.display = "block";
+
       list[i].addEventListener("click", function() {
         this.classList.toggle("active");
+
         let content = this.nextElementSibling;
         if (content.style.display === "block") {
           content.style.display = "none";
+          this.classList.add("isCollapsed");
+          this.classList.remove("isExpanded");
         } else {
           content.style.display = "block";
+          this.classList.remove("isCollapsed");
+          this.classList.add("isExpanded");
         }
       });
     }
@@ -240,7 +251,7 @@
               let groupName = document.createElement("h5");
               tmpErrLi.appendChild(groupName);
               groupName.innerHTML = OUTPUT_RESULT.Projects[i].HTMLs[j].StrictVerify.Errors[k].ErrorType;
-              groupName.setAttribute("class", "errGroup");
+              groupName.setAttribute("class", "errGroup expandCollapse");
 
               let tmpInduvidualErrors = document.createElement("ul");
               tmpErrLi.appendChild(tmpInduvidualErrors);
