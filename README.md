@@ -1,5 +1,9 @@
 # Easy HTML/CSS Validator
 Validates html and css using the W3 standard for html5 and XHTML 1.0 Strict and presents it in a easy to read way
+### Validates HTML using:
+* HTML5
+* XHTML 1.0 Strict
+### Validates CSS:
 
 ## How to use
 ### Usage
