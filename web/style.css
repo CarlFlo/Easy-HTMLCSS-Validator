@@ -12,7 +12,6 @@ body {
 
 .fileName {
   color: #00adee;
-
 }
 
 .fileGroup {
@@ -38,6 +37,7 @@ body {
 }
 .errGroup {
   color: darkgoldenrod;
+	font-size: 1em;
 }
 
 li {
