@@ -17,7 +17,7 @@
       let tmp = list[i].nextElementSibling;
       tmp.style.display = "block";
 
-      list[i].addEventListener("click", function() {
+      list[i].addEventListener("click", function () {
         this.classList.toggle("active");
 
         let content = this.nextElementSibling;
@@ -43,6 +43,13 @@
       miniContainer.setAttribute("id", `projectId-${i}`);
       miniContainer.setAttribute("class", `project`);
 
+      /* append to container */
+      CONTAINER.appendChild(miniContainer);
+
+      // So entire thing can be collapsed and expanded
+      //let stuffContainer = document.createElement("div");
+      //miniContainer.appendChild(stuffContainer)
+
       // Sets foldername as title for the project section
       let title = document.createElement("h1");
       title.setAttribute("class", "folderName");
@@ -55,7 +62,7 @@
         cssList.setAttribute("class", "cssList");
 
         let cssSection = document.createElement("h2");
-        cssSection.setAttribute("class", "fileGroup");
+        cssSection.setAttribute("class", "fileGroup expandCollapse");
         cssSection.innerHTML = "[CSS]";
         cssList.appendChild(cssSection);
 
@@ -92,7 +99,7 @@
 
         let fileGroup = document.createElement("h2"); // fileGroup
         htmlList.appendChild(fileGroup);
-        fileGroup.setAttribute("class", "fileGroup");
+        fileGroup.setAttribute("class", "fileGroup expandCollapse");
         fileGroup.innerHTML = "[HTML]";
 
         let htmlContainer = document.createElement("ul"); // htmlContainer
@@ -172,7 +179,7 @@
 
           let warningsText = document.createElement("h4");
           xhtmlWarningList.appendChild(warningsText);
-          warningsText.setAttribute("class", "xhtml-warning");
+          warningsText.setAttribute("class", "xhtml-warning expandCollapse");
           warningsText.innerHTML = "Warning(s):";
 
           if (OUTPUT_RESULT.Projects[i].HTMLs[j].StrictVerify.Warnings.length == 0) {
@@ -201,7 +208,7 @@
 
           let infoText = document.createElement("h4");
           xhtmlInfoList.appendChild(infoText);
-          infoText.setAttribute("class", "xhtml-info");
+          infoText.setAttribute("class", "xhtml-info expandCollapse");
           infoText.innerHTML = "Info(s):";
 
           if (OUTPUT_RESULT.Projects[i].HTMLs[j].StrictVerify.Infos.length == 0) {
@@ -271,7 +278,7 @@
                 tmpError.innerText = `Error: ${OUTPUT_RESULT.Projects[i].HTMLs[j].StrictVerify.Errors[k].ErrorStrings[kk].Error}`;
                 tmpText.innerText = `Text: ${OUTPUT_RESULT.Projects[i].HTMLs[j].StrictVerify.Errors[k].ErrorStrings[kk].TextFromHTML}`;
                 //tmpText.
-              } 
+              }
             }
           }
 
@@ -280,10 +287,6 @@
       } else {
         // no html. Show no html msg on screen
       }
-
-
-      /* appendar till container */
-      CONTAINER.appendChild(miniContainer);
     }
   }
 
