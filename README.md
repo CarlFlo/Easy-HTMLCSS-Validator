@@ -1,4 +1,4 @@
-# Bulk html Validator
+# html/css Validator
 Validates html and css using the W3 standard for html5 and XHTML 1.0 Strict and presents it in a easy to read way
 
 ## How to
