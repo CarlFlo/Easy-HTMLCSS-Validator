@@ -16,7 +16,7 @@ func SaveResult(list *Work) {
 
 	// Saving file
 	jsonDataJSON, _ := json.MarshalIndent(list, "", "   ")
-	ioutil.WriteFile(Config.OutputFilename, []byte(fmt.Sprintf("var OUTPUT_RESULT = %s", string(jsonDataJSON))), 0644)
+	ioutil.WriteFile("output.js", []byte(fmt.Sprintf("var OUTPUT_RESULT = %s", string(jsonDataJSON))), 0644)
 
 	openSite()
 }

@@ -60,12 +60,12 @@ func main() {
 		functions.SleepMs(3000)
 		// Output result to file
 		jsonDataJSON, _ := json.MarshalIndent(list, "", "   ")
-		ioutil.WriteFile(fmt.Sprintf("interrupted-%s", functions.Config.OutputFilename), jsonDataJSON, 0644)
+		ioutil.WriteFile("interrupted-output.js", jsonDataJSON, 0644)
 		os.Exit(1)
 	}()
 
-	// Test
-	os.Args = append(os.Args, "D:\\Dropbox\\Kod\\Go\\Projects\\W3 validator - golang\\bin\\projectZip.zip")
+	// Args Test
+	//os.Args = append(os.Args, "D:\\Dropbox\\Kod\\Go\\Projects\\W3 validator - golang\\bin\\projectZip.zip")
 
 	// For when user drags in a folder or .zip file onto the exe file for single verify
 	if len(os.Args) > 1 {

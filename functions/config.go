@@ -15,7 +15,6 @@ var Config *configStruct
 type configStruct struct {
 	Cores               int           `json:"cores"` // Hur många cores som go rutines får använda
 	FolderName          string        `json:"folderName"`
-	OutputFilename      string        `json:"outputFilename"`
 	GracefulStop        bool          `json:"gracefulStop"`
 	DispConfigOnStart   bool          `json:"dispConfigOnStart"`
 	DisplayResult       bool          `json:"displayResult"`
@@ -79,12 +78,11 @@ func createConfig() error {
 	configStruct := configStruct{
 		Cores:               2,
 		FolderName:          "toValidate",
-		OutputFilename:      "output.js",
 		GracefulStop:        true,
 		DispConfigOnStart:   true,
 		DisplayResult:       true,
 		OpenResultWeb:       true,
-		KeepOpenInSeconds:   120,
+		KeepOpenInSeconds:   30,
 		MakeHelpTxt:         true,
 		DeleteUnzipedFolder: true,
 		DrawUI:              true,
@@ -117,11 +115,6 @@ func checkConfigValues() {
 	}
 
 	if Config.KeepOpenInSeconds < 0 {
-		Config.KeepOpenInSeconds = 120
-	}
-
-	// Check output name
-	if len(Config.OutputFilename) == 0 {
-		Config.OutputFilename = "output.json"
+		Config.KeepOpenInSeconds = 30
 	}
 }

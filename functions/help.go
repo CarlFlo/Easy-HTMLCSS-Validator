@@ -33,7 +33,7 @@ func createString() []byte {
 	buffer.WriteString("\ndispConfigOnStart: (bool) will display config on start with a small delay for reading it (3.5 seconds).")
 	buffer.WriteString("\ndisplayResult: (bool) If verify result should be printed when done")
 	buffer.WriteString("\nopenResultWeb: (bool) If a custom local website should be opened once the process is done to display the result")
-	buffer.WriteString("\nkeepOpenInSeconds: (int) How long in seconds that the program will stay open after completion (def=120)")
+	buffer.WriteString("\nkeepOpenInSeconds: (int) How long in seconds that the program will stay open after completion (def=30)")
 	buffer.WriteString("\nmakeHelpTxt: (bool) If this txt file is to be created (def=true)")
 	buffer.WriteString("\ndeleteUnzipedFolder: (bool) If true then .zip folders extracted data is deleted after use")
 	buffer.WriteString("\nDrawUI: (bool) True if you want to show the progress in the cmd")
