@@ -238,9 +238,10 @@
                 let tmpText = document.createElement("p");
                 tmpErrInfo.appendChild(tmpText);
 
-                tmpLine.innerHTML = `Line: ${OUTPUT_RESULT.Projects[i].HTMLs[j].StrictVerify.Errors[k].ErrorStrings[kk].Line}`;
-                tmpError.innerHTML = `Error: ${OUTPUT_RESULT.Projects[i].HTMLs[j].StrictVerify.Errors[k].ErrorStrings[kk].Error}`;
-                tmpText.innerHTML = `Text: ${OUTPUT_RESULT.Projects[i].HTMLs[j].StrictVerify.Errors[k].ErrorStrings[kk].TextFromHTML}`;
+                tmpLine.innerText = `Line: ${OUTPUT_RESULT.Projects[i].HTMLs[j].StrictVerify.Errors[k].ErrorStrings[kk].Line}`;
+                tmpError.innerText = `Error: ${OUTPUT_RESULT.Projects[i].HTMLs[j].StrictVerify.Errors[k].ErrorStrings[kk].Error}`;
+                tmpText.innerText = `Text: ${OUTPUT_RESULT.Projects[i].HTMLs[j].StrictVerify.Errors[k].ErrorStrings[kk].TextFromHTML}`;
+                //tmpText.
               } 
             }
           }
