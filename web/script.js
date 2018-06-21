@@ -4,6 +4,24 @@
   let CONTAINER = document.getElementById("container");
 
   displayResult();
+  handleExpandCollapse();
+
+  function handleExpandCollapse() {
+
+    // Add eventlisteners to every "button" for expand and collapse
+    let list = document.getElementsByClassName("expandCollapse"); // expandCollapse
+    for (let i = 0; i < list.length; i++) {
+      list[i].addEventListener("click", function() {
+        this.classList.toggle("active");
+        let content = this.nextElementSibling;
+        if (content.style.display === "block") {
+          content.style.display = "none";
+        } else {
+          content.style.display = "block";
+        }
+      });
+    }
+  }
 
   function displayResult() {
 
@@ -79,7 +97,7 @@
 
           let fileName = document.createElement("h3");  // fileName
           singleHTML.appendChild(fileName);
-          fileName.setAttribute("class", "fileName");
+          fileName.setAttribute("class", "fileName expandCollapse");
           fileName.innerHTML = `Path: ${OUTPUT_RESULT.Projects[i].HTMLs[j].Path}`;
 
           let verifyList = document.createElement("ul");  // verifyList
@@ -201,7 +219,7 @@
 
           let errorText = document.createElement("h4"); // xhtml-error
           xhtmlErrorList.appendChild(errorText);
-          errorText.setAttribute("class", "xhtml-error");
+          errorText.setAttribute("class", "xhtml-error expandCollapse");
           errorText.innerHTML = "Error(s):";
 
           if (OUTPUT_RESULT.Projects[i].HTMLs[j].StrictVerify.Errors.length == 0) {
