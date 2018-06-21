@@ -3,7 +3,7 @@
 }
 
 body {
-  background-color: black;
+  background-color: #2c2f33;
 }
 
 .folderName {
@@ -11,11 +11,14 @@ body {
 }
 
 .fileName {
-  color: darkmagenta;
+  color: #00adee;
+
 }
 
 .fileGroup {
-  color: blue;
+  color: #7289da;
+  color: #7C7CFF;
+  /*color: #F47CFF;*/
 }
 .verifyType {
   color: cyan;
@@ -25,14 +28,13 @@ body {
   color: whitesmoke;
 }
 
-.xhtml-error {
-  color: red;
+.xhtml-error, .hasProblems {
+  color: #FF7C7C;
+
 }
-.xhtml-warning {
-  color: yellow;
-}
-.xhtml-info {
-  color: yellow;
+.xhtml-warning, .xhtml-info {
+  color: #FFD17C;
+  color: #C4FF7C;  
 }
 .errGroup {
   color: darkgoldenrod;
@@ -42,9 +44,6 @@ li {
   color: white;
 }
 
-.hasProblems {
-  color: red;
-}
 .noProblems {
   color: #22a74e;
 }
