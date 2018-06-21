@@ -1,23 +1,50 @@
-#folderName {
-  color: orange;
-}
-
-.hasProblems h3 {
-  color: red;
-}
-
-.noProblems h3 {
-  color: #22a74e;
-}
-
-ul li {
-  color: white;
-}
-
-p {
-  color: white;
+.hide {
+  display: none;
 }
 
 body {
-  background: black;
+  background-color: black;
+}
+
+.folderName {
+  color: orange;
+}
+
+.fileName {
+  color: darkmagenta;
+}
+
+.fileGroup {
+  color: blue;
+}
+.verifyType {
+  color: cyan;
+}
+
+.XHTMLresult {
+  color: whitesmoke;
+}
+
+.xhtml-error {
+  color: red;
+}
+.xhtml-warning {
+  color: yellow;
+}
+.xhtml-info {
+  color: yellow;
+}
+.errGroup {
+  color: darkgoldenrod;
+}
+
+li {
+  color: white;
+}
+
+.hasProblems {
+  color: red;
+}
+.noProblems {
+  color: #22a74e;
 }
