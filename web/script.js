@@ -70,13 +70,20 @@
         cssSection.innerHTML = "[CSS]";
         cssList.appendChild(cssSection);
 
+        // So collapse and extend will work
+        let cssDIV = document.createElement("div");
+        cssList.appendChild(cssDIV);
+
         // Iterate thru array
         for (let j = 0; j < OUTPUT_RESULT.Projects[i].CSSs.length; j++) {
           let tmpCSS = document.createElement("li");
           let cssFile = document.createElement("h3");
 
+          tmpCSS.appendChild(cssFile);
+          cssDIV.appendChild(tmpCSS);
+
           if (!OUTPUT_RESULT.Projects[i].CSSs[j].Verified) {
-            cssFile.innerHTML = "[VALIDATE FAILED]: "
+            cssFile.innerHTML = "[VALIDATION FAILED]: "
           }
 
           cssFile.innerHTML += `${OUTPUT_RESULT.Projects[i].CSSs[j].Path}`
@@ -87,8 +94,7 @@
             cssFile.setAttribute("class", "noProblems");
           }
 
-          tmpCSS.appendChild(cssFile);
-          cssList.appendChild(tmpCSS);
+          
         }
 
       } else {
