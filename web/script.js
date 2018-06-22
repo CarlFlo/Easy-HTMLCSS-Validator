@@ -52,13 +52,17 @@
 
       // Sets foldername as title for the project section
       let title = document.createElement("h1");
-      title.setAttribute("class", "folderName");
+      title.setAttribute("class", "folderName expandCollapse");
       title.innerHTML = OUTPUT_RESULT.Projects[i].FolderName;
       miniContainer.appendChild(title);
+
+      let cssHtmlHolder = document.createElement("div");
+      miniContainer.appendChild(cssHtmlHolder)
 
       // [CSS] - Check if css exists
       if (OUTPUT_RESULT.Projects[i].CSSs.length > 0) {
         let cssList = document.createElement("ul"); // list with everything css
+        cssHtmlHolder.appendChild(cssList);  // Append list
         cssList.setAttribute("class", "cssList");
 
         let cssSection = document.createElement("h2");
@@ -86,7 +90,7 @@
           tmpCSS.appendChild(cssFile);
           cssList.appendChild(tmpCSS);
         }
-        miniContainer.appendChild(cssList);  // Append list
+
       } else {
         // no css. Show no css msg on screen
       }
@@ -94,7 +98,7 @@
       // [HTML] - Check if html files exists
       if (OUTPUT_RESULT.Projects[i].HTMLs.length > 0) {
         let htmlList = document.createElement("ul");  // htmlList - list with everything html
-        miniContainer.appendChild(htmlList);
+        cssHtmlHolder.appendChild(htmlList); // Append list
         htmlList.setAttribute("class", "htmlList");
 
         let fileGroup = document.createElement("h2"); // fileGroup
@@ -283,7 +287,6 @@
           }
 
         }
-        miniContainer.appendChild(htmlList); // Append list
       } else {
         // no html. Show no html msg on screen
       }

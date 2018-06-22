@@ -41,7 +41,7 @@ body {
 }
 
 .expandCollapse:hover {
-  background-color: white;
+  background-color: #494e52;
   text-shadow:
    -1px -1px 0 #000,  
     1px -1px 0 #000,
@@ -49,11 +49,11 @@ body {
      1px 1px 0 #000;
 }
 
-.isCollapsed::after{
-  content: " - (collapsed)"
+.isCollapsed::before{
+  content: "(+) "
 }
-.isExpanded::after{
-  content: " - (expanded)"
+.isExpanded::before{
+  content: "(-) "
 }
 
 li {
