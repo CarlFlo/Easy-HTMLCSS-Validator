@@ -36,6 +36,21 @@
 
   function displayResult() {
 
+    
+
+    if (typeof OUTPUT_RESULT == 'undefined') {
+      console.log("Couldn't load ../output.js");
+
+      let errMsg = document.createElement("h1");
+      CONTAINER.appendChild(errMsg);
+      errMsg.setAttribute("align","center");
+      errMsg.classList.add("hasProblems");
+      errMsg.classList.add("blink_me");
+      errMsg.innerText = "Couldn't load ../output.js";
+
+      return
+    }
+
     // Iterate over all projects
     for (let i = 0; i < OUTPUT_RESULT.Projects.length; i++) {
 
