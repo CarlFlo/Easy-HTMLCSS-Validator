@@ -164,6 +164,7 @@
               // Validated with errors
               html5ValidateResult.innerHTML += "Validated with errors or warnings!";
               html5ValidateResult.setAttribute("class", "hasProblems");
+              html5ValidateResult.classList.add("blink_me");
             } else {
               //Validated witout errors
               html5ValidateResult.innerHTML += "OK!";
@@ -173,6 +174,7 @@
             // HTML5 verify failed
             html5ValidateResult.innerHTML += "Couldn't validate file!";
             html5ValidateResult.setAttribute("class", "hasProblems");
+            html5ValidateResult.classList.add("blink_me");
           }
 
           // XHTML 1.0 Strict
@@ -207,6 +209,7 @@
           warningsText.setAttribute("class", "xhtml-warning expandCollapse");
           warningsText.innerHTML = "Warning(s):";
 
+		  // TODO: Fix. Crashes if its NULL (.length of null)
           if (OUTPUT_RESULT.Projects[i].HTMLs[j].StrictVerify.Warnings.length == 0) {
             // No warnings
             let tmp = document.createElement("p");
@@ -265,6 +268,7 @@
           errorText.setAttribute("class", "xhtml-error expandCollapse");
           errorText.innerHTML = "Error(s):";
 
+          // TODO: Crashar om Errors är null. Cannot read property 'length' of null
           if (OUTPUT_RESULT.Projects[i].HTMLs[j].StrictVerify.Errors.length == 0) {
             // no errors
             let tmp = document.createElement("p");
@@ -296,6 +300,7 @@
                 tmpErrInfo.appendChild(tmpLine);
                 let tmpError = document.createElement("p");
                 tmpErrInfo.appendChild(tmpError);
+				        tmpError.classList.add("markMe")
                 let tmpText = document.createElement("p");
                 tmpErrInfo.appendChild(tmpText);
 

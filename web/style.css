@@ -32,12 +32,15 @@ body {
 
 }
 .xhtml-warning, .xhtml-info {
-  color: #FFD17C;
   color: #C4FF7C;  
 }
 .errGroup {
   color: darkgoldenrod;
 	font-size: 1em;
+}
+
+.markMe {
+  color: #C4FF7C;
 }
 
 .expandCollapse:hover {
@@ -70,6 +73,6 @@ li {
 
 @keyframes blinker {
   50% {
-    opacity: 0;
+    opacity: 0.2;
   }
 }
