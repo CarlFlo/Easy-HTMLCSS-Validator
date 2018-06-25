@@ -46,7 +46,8 @@ func ReadConfig() {
 func loadConfig() error {
 	log.Println("Reading config...")
 
-	file, err := ioutil.ReadFile("./config.json")
+	file, err := ioutil.ReadFile(fmt.Sprintf("%s/config.json", getExeDir()))
+	//file, err := ioutil.ReadFile("./config.json")
 
 	if err != nil {
 		log.Println(err.Error())
@@ -90,7 +91,9 @@ func createConfig() error {
 	}
 
 	jsonDataJSON, _ := json.MarshalIndent(configStruct, "", "   ")
-	err := ioutil.WriteFile("config.json", jsonDataJSON, 0644)
+
+	err := ioutil.WriteFile(fmt.Sprintf("%s/config.json", getExeDir()), jsonDataJSON, 0644)
+	//err := ioutil.WriteFile("config.json", jsonDataJSON, 0644)
 	if err != nil {
 		panic(err.Error())
 	}

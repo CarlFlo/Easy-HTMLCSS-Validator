@@ -6,9 +6,22 @@ import (
 	"math/rand"
 	"os"
 	"os/exec"
+	"path/filepath"
 	"runtime"
 	"time"
 )
+
+// Get full dir of exe
+func getExeDir() string {
+
+	dir, err := filepath.Abs(filepath.Dir(os.Args[0]))
+
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	return dir
+}
 
 // Clear will clear the screen
 func Clear() {

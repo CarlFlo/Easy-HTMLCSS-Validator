@@ -27,6 +27,11 @@ func init() {
 	runtime.GOMAXPROCS(functions.Config.Cores)
 }
 
+/*
+	folder dir
+	help txt dir
+*/
+
 func main() {
 
 	list := &functions.Work{
