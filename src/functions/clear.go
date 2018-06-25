@@ -11,6 +11,17 @@ import (
 	"time"
 )
 
+// DeleteOldOutput deletes the old output file
+func DeleteOldOutput() {
+
+	path := fmt.Sprintf("%s/output.js", getExeDir())
+
+	if _, err := os.Stat(path); err == nil {
+		os.Remove(path)
+	}
+
+}
+
 // Get full dir of exe
 func getExeDir() string {
 

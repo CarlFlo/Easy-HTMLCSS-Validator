@@ -85,7 +85,7 @@ func IsZip(str string) bool {
 		os.Exit(1)
 	}
 
-	fmt.Println("String extenstion is:", str)
+	fmt.Println("String extension is:", str)
 
 	return false
 }

@@ -69,6 +69,8 @@ func main() {
 		os.Exit(1)
 	}()
 
+	functions.DeleteOldOutput()
+
 	// Args Test
 	//os.Args = append(os.Args, "D:\\Dropbox\\Kod\\Go\\Projects\\W3 validator - golang\\bin\\projectZip.zip")
 
