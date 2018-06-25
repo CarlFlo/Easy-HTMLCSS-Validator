@@ -15,6 +15,11 @@
 
       // Removed need for first time doubleclick to enable the feature on each button
       let tmp = list[i].nextElementSibling;
+
+      if (tmp == undefined) {
+        continue;
+      }
+
       tmp.style.display = "block";
 
       list[i].addEventListener("click", function () {
@@ -36,14 +41,14 @@
 
   function displayResult() {
 
-    
+
 
     if (typeof OUTPUT_RESULT == 'undefined') {
       console.log("Couldn't load ../output.js");
 
       let errMsg = document.createElement("h1");
       CONTAINER.appendChild(errMsg);
-      errMsg.setAttribute("align","center");
+      errMsg.setAttribute("align", "center");
       errMsg.classList.add("hasProblems");
       errMsg.classList.add("blink_me");
       errMsg.innerText = "Couldn't load ../output.js";
@@ -109,7 +114,7 @@
             cssFile.setAttribute("class", "noProblems");
           }
 
-          
+
         }
 
       } else {
@@ -209,24 +214,31 @@
           warningsText.setAttribute("class", "xhtml-warning expandCollapse");
           warningsText.innerHTML = "Warning(s):";
 
-		  // TODO: Fix. Crashes if its NULL (.length of null)
-          if (OUTPUT_RESULT.Projects[i].HTMLs[j].StrictVerify.Warnings.length == 0) {
-            // No warnings
-            let tmp = document.createElement("p");
-            xhtmlWarningList.appendChild(tmp);
-            tmp.innerHTML = "No warnings"
-            tmp.setAttribute("class", "noProblems");
-
-          } else {
-            let tmpWarnsList = document.createElement("ul");
-            xhtmlWarningList.appendChild(tmpWarnsList);
-            for (let k = 0; k < OUTPUT_RESULT.Projects[i].HTMLs[j].StrictVerify.Warnings.length; k++) {
-              let tmpWarnsLi = document.createElement("li");
-              tmpWarnsList.appendChild(tmpWarnsLi);
-              let tmpWarnsP = document.createElement("p");
-              tmpWarnsLi.appendChild(tmpWarnsP);
-              tmpWarnsP.innerHTML = OUTPUT_RESULT.Projects[i].HTMLs[j].StrictVerify.Warnings[k];
+          if (OUTPUT_RESULT.Projects[i].HTMLs[j].StrictVerify.Warnings != undefined) {
+            if (OUTPUT_RESULT.Projects[i].HTMLs[j].StrictVerify.Warnings.length == 0) {
+              // No warnings
+              let tmp = document.createElement("p");
+              xhtmlWarningList.appendChild(tmp);
+              tmp.innerHTML = "No warnings"
+              tmp.setAttribute("class", "noProblems");
+  
+            } else {
+              let tmpWarnsList = document.createElement("ul");
+              xhtmlWarningList.appendChild(tmpWarnsList);
+              for (let k = 0; k < OUTPUT_RESULT.Projects[i].HTMLs[j].StrictVerify.Warnings.length; k++) {
+                let tmpWarnsLi = document.createElement("li");
+                tmpWarnsList.appendChild(tmpWarnsLi);
+                let tmpWarnsP = document.createElement("p");
+                tmpWarnsLi.appendChild(tmpWarnsP);
+                tmpWarnsP.innerText = OUTPUT_RESULT.Projects[i].HTMLs[j].StrictVerify.Warnings[k];
+              }
             }
+          } else {
+            // No warnings
+            console.log("no warnings")
+            let errMsg = document.createElement("p");
+            xhtmlWarningList.appendChild(errMsg);
+            errMsg.innerText = "No warnings!";
           }
 
           // Info
@@ -239,23 +251,31 @@
           infoText.setAttribute("class", "xhtml-info expandCollapse");
           infoText.innerHTML = "Info(s):";
 
-          if (OUTPUT_RESULT.Projects[i].HTMLs[j].StrictVerify.Infos.length == 0) {
-            // No infos
-            let tmp = document.createElement("p");
-            xhtmlInfoList.appendChild(tmp);
-            tmp.innerHTML = "No info";
-            tmp.setAttribute("class", "noProblems");
-
-          } else {
-            let tmpInfoList = document.createElement("ul");
-            xhtmlInfoList.appendChild(tmpInfoList);
-            for (let k = 0; k < OUTPUT_RESULT.Projects[i].HTMLs[j].StrictVerify.Infos.length; k++) {
-              let tmpInfoLi = document.createElement("li");
-              tmpInfoList.appendChild(tmpInfoLi);
-              let tmpInfoP = document.createElement("p");
-              tmpInfoLi.appendChild(tmpInfoP);
-              tmpInfoP.innerHTML = OUTPUT_RESULT.Projects[i].HTMLs[j].StrictVerify.Infos[k];
+          if (OUTPUT_RESULT.Projects[i].HTMLs[j].StrictVerify.Infos != undefined) {
+            if (OUTPUT_RESULT.Projects[i].HTMLs[j].StrictVerify.Infos.length == 0) {
+              // No infos
+              let tmp = document.createElement("p");
+              xhtmlInfoList.appendChild(tmp);
+              tmp.innerHTML = "No info";
+              tmp.setAttribute("class", "noProblems");
+  
+            } else {
+              let tmpInfoList = document.createElement("ul");
+              xhtmlInfoList.appendChild(tmpInfoList);
+              for (let k = 0; k < OUTPUT_RESULT.Projects[i].HTMLs[j].StrictVerify.Infos.length; k++) {
+                let tmpInfoLi = document.createElement("li");
+                tmpInfoList.appendChild(tmpInfoLi);
+                let tmpInfoP = document.createElement("p");
+                tmpInfoLi.appendChild(tmpInfoP);
+                tmpInfoP.innerText = OUTPUT_RESULT.Projects[i].HTMLs[j].StrictVerify.Infos[k];
+              }
             }
+          } else {
+            // no infos
+            console.log("no info")
+            let errMsg = document.createElement("p");
+            xhtmlInfoList.appendChild(errMsg);
+            errMsg.innerText = "No info!";
           }
 
           // Errors
@@ -268,50 +288,57 @@
           errorText.setAttribute("class", "xhtml-error expandCollapse");
           errorText.innerHTML = "Error(s):";
 
-          // TODO: Crashar om Errors är null. Cannot read property 'length' of null
-          if (OUTPUT_RESULT.Projects[i].HTMLs[j].StrictVerify.Errors.length == 0) {
-            // no errors
-            let tmp = document.createElement("p");
-            xhtmlErrorList.appendChild(tmp);
-            tmp.innerHTML = "No errors";
-            tmp.setAttribute("class", "noProblems");
+          if (OUTPUT_RESULT.Projects[i].HTMLs[j].StrictVerify.Errors != undefined) {
 
-          } else {
-
-            let tmpErrorList = document.createElement("ul");  // holds all errors
-            xhtmlErrorList.appendChild(tmpErrorList);
-
-            for (let k = 0; k < OUTPUT_RESULT.Projects[i].HTMLs[j].StrictVerify.Errors.length; k++) {
-              let tmpErrLi = document.createElement("li");
-              tmpErrorList.appendChild(tmpErrLi);
-              let groupName = document.createElement("h5");
-              tmpErrLi.appendChild(groupName);
-              groupName.innerHTML = OUTPUT_RESULT.Projects[i].HTMLs[j].StrictVerify.Errors[k].ErrorType;
-              groupName.setAttribute("class", "errGroup expandCollapse");
-
-              let tmpInduvidualErrors = document.createElement("ul");
-              tmpErrLi.appendChild(tmpInduvidualErrors);
-
-              for (let kk = 0; kk < OUTPUT_RESULT.Projects[i].HTMLs[j].StrictVerify.Errors[k].ErrorStrings.length; kk++) {
-                let tmpErrInfo = document.createElement("li");
-                tmpInduvidualErrors.appendChild(tmpErrInfo);
-
-                let tmpLine = document.createElement("p");
-                tmpErrInfo.appendChild(tmpLine);
-                let tmpError = document.createElement("p");
-                tmpErrInfo.appendChild(tmpError);
-				        tmpError.classList.add("markMe")
-                let tmpText = document.createElement("p");
-                tmpErrInfo.appendChild(tmpText);
-
-                tmpLine.innerText = `Line: ${OUTPUT_RESULT.Projects[i].HTMLs[j].StrictVerify.Errors[k].ErrorStrings[kk].Line}`;
-                tmpError.innerText = `Error: ${OUTPUT_RESULT.Projects[i].HTMLs[j].StrictVerify.Errors[k].ErrorStrings[kk].Error}`;
-                tmpText.innerText = `Text: ${OUTPUT_RESULT.Projects[i].HTMLs[j].StrictVerify.Errors[k].ErrorStrings[kk].TextFromHTML}`;
-                //tmpText.
+            if (OUTPUT_RESULT.Projects[i].HTMLs[j].StrictVerify.Errors.length == 0) {
+              // no errors
+              let tmp = document.createElement("p");
+              xhtmlErrorList.appendChild(tmp);
+              tmp.innerHTML = "No errors";
+              tmp.setAttribute("class", "noProblems");
+  
+            } else {
+  
+              let tmpErrorList = document.createElement("ul");  // holds all errors
+              xhtmlErrorList.appendChild(tmpErrorList);
+  
+              for (let k = 0; k < OUTPUT_RESULT.Projects[i].HTMLs[j].StrictVerify.Errors.length; k++) {
+                let tmpErrLi = document.createElement("li");
+                tmpErrorList.appendChild(tmpErrLi);
+                let groupName = document.createElement("h5");
+                tmpErrLi.appendChild(groupName);
+                groupName.innerHTML = OUTPUT_RESULT.Projects[i].HTMLs[j].StrictVerify.Errors[k].ErrorType;
+                groupName.setAttribute("class", "errGroup expandCollapse");
+  
+                let tmpInduvidualErrors = document.createElement("ul");
+                tmpErrLi.appendChild(tmpInduvidualErrors);
+  
+                for (let kk = 0; kk < OUTPUT_RESULT.Projects[i].HTMLs[j].StrictVerify.Errors[k].ErrorStrings.length; kk++) {
+                  let tmpErrInfo = document.createElement("li");
+                  tmpInduvidualErrors.appendChild(tmpErrInfo);
+  
+                  let tmpError = document.createElement("p");
+                  tmpErrInfo.appendChild(tmpError);
+                  tmpError.classList.add("markMe")
+                  let tmpText = document.createElement("p");
+                  tmpErrInfo.appendChild(tmpText);
+                  let tmpLine = document.createElement("p");
+                  tmpErrInfo.appendChild(tmpLine);
+                  //tmpLine.style.borderBottom = "1px solid orange";
+  
+                  tmpLine.innerText = `Line: ${OUTPUT_RESULT.Projects[i].HTMLs[j].StrictVerify.Errors[k].ErrorStrings[kk].Line}`;
+                  tmpError.innerText = `Error: ${OUTPUT_RESULT.Projects[i].HTMLs[j].StrictVerify.Errors[k].ErrorStrings[kk].Error}`;
+                  tmpText.innerText = `Text: ${OUTPUT_RESULT.Projects[i].HTMLs[j].StrictVerify.Errors[k].ErrorStrings[kk].TextFromHTML}`;
+                }
               }
             }
+          } else {
+            // no errors
+            console.log("no errors")
+            let errMsg = document.createElement("p");
+            xhtmlErrorList.appendChild(errMsg);
+            errMsg.innerText = "No errors!";
           }
-
         }
       } else {
         // no html. Show no html msg on screen
