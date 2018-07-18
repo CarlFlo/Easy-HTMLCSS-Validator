@@ -197,12 +197,46 @@
           tmpResultText.setAttribute("class", "hasProblems");
           XHTMLresult.appendChild(tmpResultText);
 
-          // List that holds all warnings, info and errors
+          // List that holds all warnings, info and errors (and outline)
           let errAndWarnList = document.createElement("ul");  // errAndWarnList
           verifyXHTMLstrict.appendChild(errAndWarnList);
           errAndWarnList.setAttribute("class", "errAndWarnList");
 
           // Populate list
+
+          // Outline
+          let outlineList = document.createElement("li");  // outlineList
+          errAndWarnList.appendChild(outlineList);
+          outlineList.setAttribute("class", "outlineList");
+
+          let outlineTest = document.createElement("h4");
+          outlineList.appendChild(outlineTest);
+          outlineTest.setAttribute("class", "expandCollapse");
+          outlineTest.innerHTML = "Outline:";
+
+          if (OUTPUT_RESULT.Projects[i].HTMLs[j].StrictVerify.Outline != undefined) {
+            if (OUTPUT_RESULT.Projects[i].HTMLs[j].StrictVerify.Outline.length == 0) {
+              // Nothing in outline
+              console.log("outline length is 0")
+              outlineTest.innerHTML += " len 0"
+            } else {
+
+              let tmpOutlineList = document.createElement("ul");
+              outlineList.appendChild(tmpOutlineList);
+
+              
+              let tmpOutlineLi = document.createElement("li");
+              tmpOutlineList.appendChild(tmpOutlineLi);
+              let tmpOutlineP = document.createElement("p");
+              tmpOutlineLi.appendChild(tmpOutlineP);
+              tmpOutlineP.innerText = OUTPUT_RESULT.Projects[i].HTMLs[j].StrictVerify.Outline;
+            }
+          } else {
+            // outline error
+            console.log("outline error")
+            outlineTest.innerHTML += " undefined"
+          }
+
 
           // Warnings
           let xhtmlWarningList = document.createElement("li");  // xhtmlWarningList
