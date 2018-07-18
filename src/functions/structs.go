@@ -40,6 +40,7 @@ type CSSVerify struct {
 type StrictVerify struct {
 	Verified bool // If file has been verified
 	Result   string
+	Outline  string
 	Errors   []ErrorGroup
 	Warnings []string // All warnings
 	Infos    []string

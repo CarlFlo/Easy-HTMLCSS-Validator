@@ -34,6 +34,8 @@ func ValidateHTMLStrict(html string, singleHTML *HTMLVerify) error {
 		return err
 	}
 
+	//ioutil.WriteFile("./debugReponseHTML.html", body, 0644)
+
 	// Parses the html code
 	parseHTML(string(body), singleHTML)
 

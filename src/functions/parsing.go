@@ -14,9 +14,35 @@ func parseHTML(html string, singleHTML *HTMLVerify) {
 
 	// Parses for XHTML 1.0 Strict
 	parseGroupMessages([]byte(html), singleHTML)
+	parseOutline([]byte(html), singleHTML)
 
 	// Mark this html file as done
 	singleHTML.AllVerified = true
+}
+
+// Will parse outline h1...h6 pos
+func parseOutline(body []byte, singleHTML *HTMLVerify) {
+
+	doc, err := goquery.NewDocumentFromReader(bytes.NewReader(body))
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	doc.Find(".outline").Each(func(i int, s *goquery.Selection) {
+
+		singleHTML.StrictVerify.Outline = s.Text()
+
+		/*
+			fmt.Println("----------------------\n")
+			fmt.Println(s.Text())
+			fmt.Println("\n----------------------\n")
+			fmt.Println(removeWhitespace(s.Text()))
+			fmt.Println("\n----------------------")
+			time.Sleep(time.Second * 20)
+		*/
+		return
+	})
+
 }
 
 // Will parse all the group messages
